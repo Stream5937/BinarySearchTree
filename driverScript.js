@@ -104,15 +104,47 @@ let maxNum = 100;
 let testArray;
 let tree;
 
+/*
 testArray = randArray(num, maxNum);
 console.log('testArray: ',testArray);
 tree = createBalancedBinarySearchTree (testArray);
 tree.prettyPrint();
-
-/*
-testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-console.log('testArray: ',testArray);
 */
+/** */
+//testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+//testArray = [1,3,5,7,9,11];
+console.log('\n--------------------Prior to insert 4--------------------------------\n');
+testArray = [1,3,5];
+console.log('testArray: ',testArray);
+tree = createBalancedBinarySearchTree (testArray);
+tree.prettyPrint();
+//tree.root.logNode();
+console.log('\n--------------------Post insert 4 -----------------------------------\n');
+tree.insert(tree.root, 4);
+//tree.root.logNode();
+tree.prettyPrint();
+console.log('\n--------------------Prior to insert 0--------------------------------\n');
+testArray = [1,3,5];
+console.log('testArray: ',testArray);
+tree = createBalancedBinarySearchTree (testArray);
+tree.prettyPrint();
+//tree.root.logNode();
+console.log('\n--------------------Post insert 0 -----------------------------------\n');
+tree.insert(tree.root, 0);
+//tree.root.logNode();
+tree.prettyPrint();
+console.log('\n--------------------Prior to insert 6--------------------------------\n');
+testArray = [1,3,5];
+console.log('testArray: ',testArray);
+tree = createBalancedBinarySearchTree (testArray);
+tree.prettyPrint();
+//tree.root.logNode();
+console.log('\n--------------------Post insert 6 -----------------------------------\n');
+tree.insert(tree.root, 6);
+//tree.root.logNode();
+tree.prettyPrint();
+
+/**/
 /*
 let noRepeat = removeDuplicates(testArray);
 console.log('noDuplicates: ', noRepeat);

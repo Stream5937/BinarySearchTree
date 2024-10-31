@@ -54,6 +54,11 @@ class Tree {
        }
     }
 
+    //getters & setters
+    get root () {
+        return this._root;
+    }
+
     // class methods
 
     /*
@@ -110,14 +115,51 @@ class Tree {
         }
     };
 
+    /*
+        Insert node.
+        Initialise the current node (say, currNode or node) with root node
+        Compare the key with the current node.
+        Move left if the key is less than or equal to the current node value.
+        Move right if the key is greater than current node value.
+        Repeat steps 2 and 3 until you reach a leaf node.
+        Attach the new key as a left or right child based on the comparison with the leaf node’s value.
+    */
+    //recursive insert() with initial call to root = this._root
+    insert (root, value) {
+        //console.log('129: root: ', root);
+        let node;           // 
+       //return the new node if at empty (leaf) node
+        if(root === null){
+            root = new Node (value);
+            //console.log('134: root: ', root, ', value: ', root.value);
+            return root;}
+        //let next;
+        // check not trying to insert value already present ?
+        if(value === root.value){console.log('Value already present'); return node;}
+        //decide whether  to left or right
+        if (value > root.value) {
+            //console.log('141: root: ', root, ', value: ', root.value);
+            root.rightSubNode = this.insert(root.rightSubNode, value);
+            //console.log('143 root: ', root, ', value: ', root.value);
+            return root;
+        }else{
+           //console.log('146 root: ', root, ', value: ', root.value);
+           root.leftSubNode= this.insert(root.leftSubNode, value);
+           //console.log('148 root: ', root, ', value: ', root.value);
+           return root;
+        }
+        
+    }
+
     //Confirm that the tree is balanced by calling isBalanced.
-    //separate test function or method ???
     isBalanced (searchTree) {
         let isBalanced = false;
 
         
         return isBalanced;
     }
+
+
 }
 
 
