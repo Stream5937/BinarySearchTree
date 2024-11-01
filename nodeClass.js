@@ -54,5 +54,25 @@ class Node {
         console.log('(',this.leftSubNode,')',' ','(', this.rightSubNode, ')' );
     }
 
+    hasChild (){
+        //if so returns left, right, both  (or false if not)
+        let both = 0;
+        if(!(this.leftSubNode === null)){
+            //console.log('left: ',this.leftSubNode.value);
+            both += 1;
+        }
+        if(!(this.rightSubNode === null)){
+            //console.log('right: ',this.rightSubNode.value);
+            both += 2;
+        }
+        switch(both){
+            case 0: { return false; }
+            case 1: { return 'left';}
+            case 2: { return 'right';}
+            case 3: { return 'both';}
+            break;
+        }
+    }
+
 }
 export {Node}

@@ -24,9 +24,34 @@ Write an isBalanced function that checks if the tree is balanced. A balanced tre
 
 Write a rebalance function that rebalances an unbalanced tree. Tip: You’ll want to use a traversal method to provide a new array to the buildTree function.
 
+In-order, LNR
+
+    Recursively traverse the current node's left subtree.
+    Visit the current node (in the figure: position green).
+    Recursively traverse the current node's right subtree.
+
+In a binary search tree ordered such that in each node the key is greater than all keys in its left subtree and less than all keys in its right subtree, in-order traversal retrieves the keys in ascending sorted order.[7] 
+
+Pre-order, NLR
+
+    Visit the current node (in the figure: position red).
+    Recursively traverse the current node's left subtree.
+    Recursively traverse the current node's right subtree.
+
+The pre-order traversal is a topologically sorted one, because a parent node is processed before any of its child nodes is done. 
+
+Post-order, LRN
+
+    Recursively traverse the current node's left subtree.
+    Recursively traverse the current node's right subtree.
+    Visit the current node (in the figure: position blue).
+
+Post-order traversal can be useful to get postfix expression of a binary expression tree. 
+
 */
 
 import {Node} from "./nodeClass.js";
+import {Queue} from "./queueClass.js";
 
 //const node  = new Node(value, leftSubNode, rightSubNode);
 
@@ -135,7 +160,7 @@ class Tree {
             return root;}
         //let next;
         // check not trying to insert value already present ?
-        if(value === root.value){console.log('Value already present'); return node;}
+        if(value === root.value){console.log('Value already present'); return root;} //mod 31/10/24
         //decide whether  to left or right
         if (value > root.value) {
             //console.log('141: root: ', root, ', value: ', root.value);
@@ -151,6 +176,83 @@ class Tree {
         
     }
 
+    /*
+        Delete node
+        deleteItem(value) function that deletes the given value. Deal with several cases for delete, such as when a node has children or not
+
+        Initialise the current node with root node
+        Compare the key with the current node. If delete value equals node value then this node to be deleted.
+        if this the tree root node then set tree root node to null i.e totally empty tree;
+        else check subNode values for this root.
+        if either subNodeValue === delete value then set this subNode is node to delete .
+        check if this subNode has values other than null for its children if so reset root of deleted subNode to point to these children
+    */
+    //recursive delete(root, value) with initial call to root = this._root
+    delete (root, value) {
+
+    }
+
+    /*
+        Write a height(node) function that returns the given node’s height. Height is defined as the number of edges in the longest path from a given node to a leaf node.
+    */
+
+    height(root) {
+        let height = 0;
+        let l_height;
+        let r_height;
+        let max = 0;
+        let hasChild = root.hasChild();
+        //root.logNode;
+        //console.log('hasChild: ',hasChild);
+        if (hasChild){
+            height++;
+            //console.log('207: height',height);
+            switch (hasChild) {
+                case 'both': {
+                        l_height = height;
+                        l_height += this.height(root.leftSubNode);
+                        //console.log('211: l_height',l_height);
+                        max = l_height > max ? l_height : max;
+                        r_height = height;
+                        r_height += this.height(root.rightSubNode);
+                        //console.log('214: r_height',r_height);
+                        max = r_height > max ? r_height : max
+                    break;
+                }
+                case 'left': {
+                        l_height = height;
+                        l_height += this.height(root.leftSubNode);
+                        //console.log('225: l_height',l_height);
+                        max = l_height > max ? l_height : max;
+                    break;
+                }
+                case 'right': {
+                        r_height = height;
+                        r_height += this.height(root.rightSubNode);
+                        //console.log('214: r_height',r_height);
+                        max = r_height > max ? r_height : max
+                    break;
+                }
+            }
+                
+        }
+        
+        return max;
+        
+    }
+   /*
+        Write a depth(node) function that returns the given node’s depth. Depth is defined as the number of edges in the path from a given node to the tree’s root node.
+    */
+        depth(node) {
+            let depth = 0;
+
+            return depth;
+        }
+
+
+    /*
+        isBalanced function that checks if the tree is balanced. A balanced tree is one where the difference between heights of the left subtree and the right subtree of every node is not more than 1.
+    */
     //Confirm that the tree is balanced by calling isBalanced.
     isBalanced (searchTree) {
         let isBalanced = false;

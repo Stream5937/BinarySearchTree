@@ -14,6 +14,7 @@
 import {Node} from "./nodeClass.js";
 //const node  = new Node(value, leftSubNode, rightSubNode);
 import {Tree} from "./treeClass.js";
+import {Queue} from "./queueClass.js"
 
 //a function that returns an array of num random numbers each < maximum number maxNum
 function randArray( num, maxNum) {
@@ -103,6 +104,7 @@ let num = 10;
 let maxNum = 100;
 let testArray;
 let tree;
+let height;
 
 /*
 testArray = randArray(num, maxNum);
@@ -110,7 +112,7 @@ console.log('testArray: ',testArray);
 tree = createBalancedBinarySearchTree (testArray);
 tree.prettyPrint();
 */
-/** */
+/*
 //testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 //testArray = [1,3,5,7,9,11];
 console.log('\n--------------------Prior to insert 4--------------------------------\n');
@@ -144,7 +146,7 @@ tree.insert(tree.root, 6);
 //tree.root.logNode();
 tree.prettyPrint();
 
-/**/
+*/
 /*
 let noRepeat = removeDuplicates(testArray);
 console.log('noDuplicates: ', noRepeat);
@@ -152,7 +154,6 @@ console.log('noDuplicates: ', noRepeat);
 let sortedArray = noRepeat.sort(function(a, b){return a - b});
 console.log('sortedArray: ', sortedArray);
 */
-
 
 /*
 console.log('\n---------------[ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]---------------------------------');
@@ -174,4 +175,49 @@ console.log('\n---------------------------[1]-----------------------------------
 tree = new Tree([1]);           //ok
 tree.prettyPrint();
  */
+/*
+//test queue class
+//test queue
+let q = new Queue();
+for (let i = 1; i <= 7; i++) {
+  q.enqueue(i);
+}
+// get the current item at the front of the queue
+console.log('peeking first in queue: ', q.peek()); // 1
 
+// get the current length of queue
+console.log('queue length: ',q.length); // 7
+
+// dequeue all elements
+console.log('logging the set of queue values head to tail: ');
+while (!q.isEmpty) {
+  console.log('queue value: .. ', q.dequeue());
+}
+*/
+
+//test height(node)
+testArray = [1,3,5];
+//console.log('testArray: ',testArray);
+tree = createBalancedBinarySearchTree (testArray);
+tree.prettyPrint();
+//console.log('tree.root: ',tree.root);
+//tree.root.logNode();
+height = tree.height(tree.root);
+console.log('height: ', height);
+console.log('\n-------------------------------------------------------------------------------\n');
+tree.insert(tree.root, 6);
+//tree.root.logNode();
+tree.prettyPrint();
+height = tree.height(tree.root);
+console.log('height: ', height);
+console.log('\n-------------------------------------------------------------------------------\n');
+tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);    //works ok
+tree.prettyPrint();
+height = tree.height(tree.root);
+console.log('height: ', height);
+console.log('\n-------------------------------------------------------------------------------\n');
+tree.insert(tree.root, 30);
+tree.prettyPrint();
+height = tree.height(tree.root);
+console.log('height: ', height);
+console.log('\n-------------------------------------------------------------------------------\n');
