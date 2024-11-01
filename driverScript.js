@@ -200,6 +200,7 @@ testArray = [1,3,5];
 //console.log('testArray: ',testArray);
 tree = createBalancedBinarySearchTree (testArray);
 tree.prettyPrint();
+/*
 //console.log('tree.root: ',tree.root);
 //tree.root.logNode();
 height = tree.height(tree.root);
@@ -220,4 +221,14 @@ tree.insert(tree.root, 30);
 tree.prettyPrint();
 height = tree.height(tree.root);
 console.log('height: ', height);
+*/
+console.log('\n-------------------------------------------------------------------------------\n');
+(tree.find(tree.root, 5)).logNode();
+console.log('\n-------------------------------------------------------------------------------\n');
+let node = tree.find(tree.root, 7);
+if(node){node.logNode;}else{console.log(null);}
+console.log('\n-------------------------------------------------------------------------------\n');
+tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);    //works ok
+tree.prettyPrint();
+(tree.find(tree.root, 67)).logNode();
 console.log('\n-------------------------------------------------------------------------------\n');

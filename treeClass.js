@@ -177,6 +177,37 @@ class Tree {
     }
 
     /*
+        Write a find(value) function that returns the node with the given value.
+    */
+    find (root, val) {
+        let node = null; 
+        let hasChild = root.hasChild();
+        root.logNode;
+        if(root.value === val){return node = root;}
+        console.log('hasChild: ',hasChild);
+        if (hasChild){
+            switch (hasChild) {
+                case 'both': {
+                        node =  this.find(root.leftSubNode, val);
+                        if (node === null){
+                            node = this.find(root.rightSubNode, val);
+                        }
+                    break;
+                }
+                case 'left': {
+                    node = this.find(root.leftSubNode, val);
+                    break;
+                }
+                case 'right': {
+                        node = this.find(root.rightSubNode, val);
+                    break;
+                }
+            }     
+        }
+        return node;
+    }
+
+    /*
         Delete node
         deleteItem(value) function that deletes the given value. Deal with several cases for delete, such as when a node has children or not
 
