@@ -253,11 +253,31 @@ console.log('\n-----------------------------------------------------------------
 */
 
 //tree.levelOrder();  //expect throws error
-
+/*
 let numbers = [1, 2, 4, 7, 3, 5, 6];
 tree = createBalancedBinarySearchTree (numbers);
 tree.prettyPrint();
 
 node = tree.levelOrder(tree.root, (node => node.logNode() ));
+if(node){console.log('node: ',node);}
+else{console.log('complete');}
+
+tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);
+tree.prettyPrint();
+node = tree.levelOrder(tree.root, (node => node.logNode() ));
+if(node){console.log('node: ',node);}
+else{console.log('complete');}
+*/
+
+//tree = new Tree([1,2,3,4,5,6,7,8,11,14]);
+tree = new Tree([1,2,3,4,5,7,8,11,14]);
+tree.prettyPrint();
+node = tree.inOrder(tree.root, (node => node.logNode() ));
+if(node){console.log('node: ',node);}
+else{console.log('complete');}
+
+tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,14]);
+tree.prettyPrint();
+node = tree.inOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}

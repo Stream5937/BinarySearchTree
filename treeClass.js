@@ -387,7 +387,11 @@ class Tree {
         try{
             if(callback === undefined) {throw "callback function needed";}
             //let node = this.root;
-            if( (node === null )|| (node === undefined) ){console.log('390: returning'); return;}
+            if( (node === null )|| (node === undefined) ){
+                //used at only one subNode
+                //console.log('390: returning');
+                return;
+            }
            // console.log('391: node',node);
             console.log('node val: ',node.value);
             
@@ -407,14 +411,108 @@ class Tree {
                 //console.log('407: returning');
                 return;
             }
-return;
+            //return;
         }
         catch(error){
             console.log(error);
         }
     }
 
-    
+    /*
+        inOrder(callback)
+        Recursively traverse the current node's left subtree.
+        Visit the current node (in the figure: position green).
+        Recursively traverse the current node's right subtree.
+
+        In a binary search tree ordered such that in each node the key is greater than all keys in its left subtree and less than all keys in its right subtree, in-order traversal retrieves the keys in ascending sorted order.[7] 
+    */
+    inOrder (node, callback ) {
+        let visited = []
+        let left;
+        let right;
+        let child;   //to node.hasChild() ?
+        try{
+            if(callback === undefined) {throw "callback function needed";}
+            
+            if( (node === null )|| (node === undefined) ){
+                //used at only one subNode ?
+                //console.log('439: returning');
+                return;
+            }
+            //record visit to node
+            if(!(visited.includes(node.value))) {visited.push(node.value);}
+            //console.log('At node val: ',node.value);
+            if(child = node.hasChild()){
+                /*  possible responses for child(ren):
+                    case 0: { return false; }
+                    case 1: { return 'left';}
+                    case 2: { return 'right';}
+                    case 3: { return 'both';}
+                */
+                //get new left & right
+                switch (child){
+                    case 'both': {
+                                    left = node.leftSubNode;
+                                    right = node.rightSubNode;
+                        break;
+                    }
+                    case 'left': {
+                                    left = node.leftSubNode;
+                                    right = null;
+                        break;
+                    }
+                    case 'right': {
+                                    left = null;
+                                    right = node.rightSubNode;
+                        break;
+                    }
+                    default: {
+                        throw 'Error at switch child';
+                    }
+                }
+                //node        (5)(4)(2)(1)(2)(3)(4) (5) (11) (7) (6) (7) (8)(9)(10)(11) (14)
+                //if new left (4)(2)(1) x  x  x  x   x  (7)  (6)  x   x   x  x  x    x   x 
+                if(!(visited.includes(left))) {
+                //so is new
+                //store self  [5][4][2] x  x  x  x   x  [11] [7]  x   x   x  x  x    x   x
+                //console.log('enqueue: ', node.value);
+                this._q.enqueue(node);
+                //go left     (4)(2)(1) x  x  x  x   x  (7)  (6)  x   x   x  x  x    x   x
+                this.inOrder(left, callback);
+                }
+                else{
+                    //else 
+                    //output self       1  2  3  4   5            6   7   8  9  10   11  14
+                   // console.log('**node value: ', node.value);
+                    
+                }
+                console.log('*node value: ', node.value);
+                //if new right      x (3) x  x  (11)          x  (8) (9)(10) x  (14) x
+                if(!(visited.includes(right))) {
+                    //go right          x (3) x  x  (11)          x  (8) (9)(10) x  (14) x
+                    this.inOrder(right, callback);
+                }else{
+                    //else
+                    //pop address     >[2]  >[4]>[5]            >[7]           >[11]    null
+                    node = this._q.dequeue();
+                    //console.log('dequeue: ', node.value);
+                    //go address       (2)   (4) (5)             (7)            (11)   finish
+                    this.inOrder(node, callback);
+                }
+
+            }else{
+                //has child response 0;
+                console.log('node value*: ', node.value);
+                //console.log('407: returning');
+                return;
+            }
+
+            //return;
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
 
 }
 
