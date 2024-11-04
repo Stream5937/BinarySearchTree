@@ -268,7 +268,7 @@ node = tree.levelOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
 */
-
+/*
 //tree = new Tree([1,2,3,4,5,6,7,8,11,14]);
 tree = new Tree([1,2,3,4,5,7,8,11,14]);
 tree.prettyPrint();
@@ -279,5 +279,12 @@ else{console.log('complete');}
 tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,14]);
 tree.prettyPrint();
 node = tree.inOrder(tree.root, (node => node.logNode() ));
+if(node){console.log('node: ',node);}
+else{console.log('complete');}
+*/
+
+tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,14]);
+tree.prettyPrint();
+node = tree.preOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
