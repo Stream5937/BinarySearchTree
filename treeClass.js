@@ -60,6 +60,7 @@ class Tree {
     //private variables
     _array = [];
     _root = null;
+    _q = null;
 
     constructor (array) {
         //cater for incorrect invocation i.e not using 'new' keyword
@@ -75,7 +76,8 @@ class Tree {
          //this._array = array;                     //a sortedNonDuplicateArray   
          //or
          this._array = this._array.concat(array);  //a sortedNonDuplicateArray 
-         this._root = this.buildTree(this._array, 0, ((this._array).length)-1);           
+         this._root = this.buildTree(this._array, 0, ((this._array).length)-1); 
+         this._q = new Queue;          
        }
     }
 
@@ -182,30 +184,54 @@ class Tree {
     find (root, val) {
         let node = null; 
         let hasChild = root.hasChild();
-        root.logNode;
-        if(root.value === val){return node = root;}
-        console.log('hasChild: ',hasChild);
+        //root.logNode;
+        if(root.value === val){ return node = root;}
+        //console.log('hasChild: ',hasChild);
         if (hasChild){
-            switch (hasChild) {
-                case 'both': {
-                        node =  this.find(root.leftSubNode, val);
-                        if (node === null){
-                            node = this.find(root.rightSubNode, val);
-                        }
-                    break;
-                }
-                case 'left': {
-                    node = this.find(root.leftSubNode, val);
-                    break;
-                }
-                case 'right': {
-                        node = this.find(root.rightSubNode, val);
-                    break;
-                }
-            }     
+            //is val < or > root.value
+            if(val < root.value){
+                //search left
+                node =  this.find(root.leftSubNode, val);              
+            }else{
+                //search right
+                 node = this.find(root.rightSubNode, val);
+            }   
         }
         return node;
     }
+    
+    
+    //===find with count
+    depth ( val) {
+        let node = null; 
+        //let max =0;
+        let count =0;
+        let root = this.root;
+        node = depthToVal(root, val => {
+            let hasChild = root.hasChild();
+            //root.logNode;
+            if(root.value === val){return node = root;}
+            //console.log('hasChild: ',hasChild);
+            if (hasChild){
+                count++;
+                console.log('count: ',count);
+                //is val < or > root.value
+                if(val < root.value){
+                    //search left
+                    node =  depthToVal (root.leftSubNode, val);              
+                }else{
+                    //search right
+                    node = depthToVal (root.rightSubNode, val);
+                }   
+            }
+            return node;
+        });
+        console.log('node: ', node);
+        if(node === null ){count = 0;}
+        else{ console.log('227:depth: ',count);}
+        return count;
+    }
+   
 
     /*
         Delete node
@@ -224,7 +250,68 @@ class Tree {
     }
 
     /*
-        Write a height(node) function that returns the given node’s height. Height is defined as the number of edges in the longest path from a given node to a leaf node.
+        Write a height(node) function that returns the given node’s height. Height is defined as the number of edges in the longest path from a given node to a leaf node.  
+    */
+    //NB CURRENTLY DEPTH TO NODE!!          //heightFN  heightFromNode()
+    heightFN(root, val){
+        let height = 0;
+        let l_height;
+        let r_height;
+        let max=0;
+        let hasChild = root.hasChild();
+        console.log('root.value', root.value,', val: ', val, ',max: ',max);
+        
+        //root.logNode;
+        //console.log('hasChild: ',hasChild);
+        if (hasChild){
+            height++;
+            
+            //console.log('207: height',height);
+            switch (hasChild) {
+                case 'both': {
+                        l_height = height;
+                        l_height += this.heightFN(root.leftSubNode,val);
+                        //console.log('211: l_height',l_height);
+                        max = l_height > max ? l_height : max;
+                        if(root.leftSubNode.value === val){ return max;}
+                        r_height = height;
+                        r_height += this.heightFN(root.rightSubNode,val);
+                        //console.log('214: r_height',r_height);
+                        max = r_height > max ? r_height : max
+                        if(root.rightSubNode.value === val){ return max;}
+                    break;
+                }
+                case 'left': {
+                        l_height = height;
+                        l_height += this.heightFN(root.leftSubNode,val);
+                        //console.log('225: l_height',l_height);
+                        max = l_height > max ? l_height : max;
+                        if(root.leftSubNode){
+                            if(root.leftSubNode.value === val){ return max;}
+                        }
+                    break;
+                }
+                case 'right': {
+                        r_height = height;
+                        r_height += this.heightFN(root.rightSubNode,val);
+                        //console.log('214: r_height',r_height);
+                        max = r_height > max ? r_height : max
+                        if(root.rightSubNode){
+                            if(root.rightSubNode.value === val){ return max;}
+                        }
+                    break;
+                }
+            }
+                  
+        }else{
+            max = height > max ? height : max;
+           // if(root.value === val){ return max;}
+            return max;
+        }   
+    }
+
+    /*
+        this one is a height(root) function that returns the given tree's height. Height here is defined as the number of edges in the longest path from root to the lowest leaf node. Called with trees root.
     */
 
     height(root) {
@@ -274,12 +361,13 @@ class Tree {
    /*
         Write a depth(node) function that returns the given node’s depth. Depth is defined as the number of edges in the path from a given node to the tree’s root node.
     */
+   /*
         depth(node) {
             let depth = 0;
 
             return depth;
         }
-
+*/
 
     /*
         isBalanced function that checks if the tree is balanced. A balanced tree is one where the difference between heights of the left subtree and the right subtree of every node is not more than 1.
@@ -292,6 +380,41 @@ class Tree {
         return isBalanced;
     }
 
+    /*
+        levelOrder function that accepts a callback function as its parameter. levelOrder should traverse the tree in breadth-first level order and call the callback on each node as it traverses, passing the whole node as an argument, similarly to how Array.prototype.forEach might work for arrays. levelOrder may be implemented using either iteration or recursion (try implementing both!). If no callback function is provided, throw an Error reporting that a callback is required. Tip: You will want to use an array acting as a queue to keep track of all the child nodes that you have yet to traverse and to add new ones to the list
+    */
+   levelOrder (node, callback ) {
+        try{
+            if(callback === undefined) {throw "callback function needed";}
+            //let node = this.root;
+            if( (node === null )|| (node === undefined) ){console.log('390: returning'); return;}
+           // console.log('391: node',node);
+            console.log('node val: ',node.value);
+            
+            //callback(node);
+            if(node.hasChild()){
+                this._q.enqueue(node.leftSubNode);
+                this._q.enqueue(node.rightSubNode);
+
+               // console.log('peek: ',this._q.peek().value);
+
+               // console.log('q1: ',this._q.dequeue().value);
+               // console.log('q2: ',this._q.dequeue().value);
+
+                this.levelOrder(this._q.dequeue(), callback);   //left
+                this.levelOrder(this._q.dequeue(), callback);   //right
+            }else{
+                //console.log('407: returning');
+                return;
+            }
+return;
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+    
 
 }
 

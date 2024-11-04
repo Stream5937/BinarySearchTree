@@ -51,7 +51,7 @@ class Node {
         console.log('      | ');
         console.log('    (',this.value,') ');
         console.log('  v---^---v    ')
-        console.log('(',this.leftSubNode,')',' ','(', this.rightSubNode, ')' );
+        console.log('(',this.leftSubNode.value,')',' ','(', this.rightSubNode.value, ')' ); //04/11/24
     }
 
     hasChild (){

@@ -104,6 +104,7 @@ let num = 10;
 let maxNum = 100;
 let testArray;
 let tree;
+let node;
 let height;
 
 /*
@@ -193,13 +194,15 @@ console.log('logging the set of queue values head to tail: ');
 while (!q.isEmpty) {
   console.log('queue value: .. ', q.dequeue());
 }
+console.log('queue empty ?',q.isEmpty);
 */
-
+/*
 //test height(node)
 testArray = [1,3,5];
 //console.log('testArray: ',testArray);
 tree = createBalancedBinarySearchTree (testArray);
 tree.prettyPrint();
+*/
 /*
 //console.log('tree.root: ',tree.root);
 //tree.root.logNode();
@@ -222,13 +225,39 @@ tree.prettyPrint();
 height = tree.height(tree.root);
 console.log('height: ', height);
 */
+/*
+console.log('\n----------------------find 5---------------------------------------------------------\n');
+node = (tree.find(tree.root, 5))
+if(node){node.logNode();}else{console.log(null);}
+console.log('\n-----------------------find 7--------------------------------------------------------\n');
+node = tree.find(tree.root, 7);
+if(node){node.logNode();}else{console.log(null);}
+*/
+/*
+console.log('\n-----------------------find 324--------------------------------------------------------\n');
+tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);    //works ok
+tree.prettyPrint();
+let depth = (tree.depth(324));
+console.log('depth: ', depth);
 console.log('\n-------------------------------------------------------------------------------\n');
-(tree.find(tree.root, 5)).logNode();
-console.log('\n-------------------------------------------------------------------------------\n');
-let node = tree.find(tree.root, 7);
-if(node){node.logNode;}else{console.log(null);}
+*/
+/*
+//height of node
 console.log('\n-------------------------------------------------------------------------------\n');
 tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);    //works ok
 tree.prettyPrint();
-(tree.find(tree.root, 67)).logNode();
+
+let nodeHeight = tree.heightFN(tree.root, 324);
+console.log('node height: ', nodeHeight);
 console.log('\n-------------------------------------------------------------------------------\n');
+*/
+
+//tree.levelOrder();  //expect throws error
+
+let numbers = [1, 2, 4, 7, 3, 5, 6];
+tree = createBalancedBinarySearchTree (numbers);
+tree.prettyPrint();
+
+node = tree.levelOrder(tree.root, (node => node.logNode() ));
+if(node){console.log('node: ',node);}
+else{console.log('complete');}
