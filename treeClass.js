@@ -54,6 +54,10 @@ import {Node} from "./nodeClass.js";
 import {Queue} from "./queueClass.js";
 
 //const node  = new Node(value, leftSubNode, rightSubNode);
+//const prompt = require('prompt-sync')();
+import promptSync from 'prompt-sync';
+const prompt = promptSync();
+//const result = prompt(message);
 
 class Tree {
 
@@ -466,6 +470,9 @@ class Tree {
                                     right = node.rightSubNode;
                         break;
                     }
+                    case false: {
+
+                    }
                     default: {
                         throw 'Error at switch child';
                     }
@@ -582,6 +589,112 @@ class Tree {
                 console.log(error);
             }
         }
+
+    /*
+        Post-order, LRN
+
+        Recursively traverse the current node's left subtree.
+        Recursively traverse the current node's right subtree.
+        Visit the current node (in the figure: position blue).
+
+        Post-order traversal can be useful to get postfix expression of a binary expression tree. 
+
+        If root is NULL then return
+        Postorder (root -> left)
+        Postorder (root -> right)
+        Process root (For example, print(root->data))
+    */
+    postOrder (node, callback) {
+       // let processed = [];
+        let left;
+        let right;
+        let child;   //to node.hasChild() ?
+        try{
+            if(callback === undefined) {throw "callback function needed";}
+            
+            if( (node === null )|| (node === undefined) ){
+                console.log('609: returning');
+                return;
+            }
+           // let result = prompt("hit key to continue: ");
+            //if(result === 'q'){throw 99;}
+            //console.log('** ',node.value,' **');
+            this._q.enqueue(node.value);
+            //visited.push(root);
+            if(child = node.hasChild()){
+                //console.log('root ',root);
+                //console.log('has child');
+                /*  possible responses for child(ren):
+                    case 0: { return false; }
+                    case 1: { return 'left';}
+                    case 2: { return 'right';}
+                    case 3: { return 'both';}
+                */
+                //get new left & right
+                switch (child){
+                    case 'both': {
+                                    left = node.leftSubNode;
+                                    this.postOrder(left, callback);
+                                    //console.log('l ',left.value);
+                                    console.log(left.value);
+                                   // processed.push(this._q.dequeue());
+                                    this._q.dequeue();
+                                    right = node.rightSubNode;
+                                    this.postOrder(right, callback);
+                                    //console.log('r ',right.value);
+                                    console.log(right.value);
+                                   // processed.push(this._q.dequeue());
+                                    this._q.dequeue();
+                                    //console.log('q.len: ',this._q.length);
+                                    //process the topmost root
+                                    if(this._q.length === 1){console.log(node.value);}
+                                    return;
+                        break;
+                    }
+                    case 'left': {
+                                    left = node.leftSubNode;
+                                    this.postOrder(left, callback);
+                                    right = null;
+                                    //console.log('* ',left.value);
+                                    console.log(left.value);
+                                    // processed.push(this._q.dequeue());
+                                    this._q.dequeue();
+                                    return;
+                        break;
+                    }
+                    case 'right': {
+                                    left = null;
+                                    right = node.rightSubNode;
+                                    this.postOrder(right, callback);
+                                    //console.log('2,5,8 ',right.value);
+                                    console.log(right.value);
+                                    // processed.push(this._q.dequeue());
+                                    this._q.dequeue();
+                                    return;
+                        break;
+                    }
+                    default: {
+                        throw 'Error at switch child';
+                    }
+                } 
+                //xx process node here
+                //console.log('processing node: ', node.value);
+            }else{
+                //console.log('No child');
+                //this.postOrder(node, callback);
+                //console.log('processing node: ', node.value);
+                //console.log('* ', node.value);
+                //xxconsole.log('root ',root);
+                return;
+            }
+            console.log('#####');
+        }
+        catch(error){
+            console.log(error);
+            process.exit(0);
+        }
+        //xxconsole.log('root ',root);
+    }
 
 }
 

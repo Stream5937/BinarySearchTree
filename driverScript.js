@@ -282,9 +282,25 @@ node = tree.inOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
 */
-
+/*
 tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,14]);
 tree.prettyPrint();
 node = tree.preOrder(tree.root, (node => node.logNode() ));
+if(node){console.log('node: ',node);}
+else{console.log('complete');}
+*/
+tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
+tree.prettyPrint();
+/*prints equivalent of:
+        v-----------6-----------v
+    v---3---v               v---9-----v
+    1-v     4-v             7-v    v--11--v
+      2       5               8   10      14
+
+Expected output for post order:
+    2,1,5,4,3,8,7,10,14,11,9,6
+*/
+
+node = tree.postOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
