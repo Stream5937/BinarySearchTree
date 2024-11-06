@@ -106,6 +106,7 @@ let testArray;
 let tree;
 let node;
 let height;
+let val;
 
 /*
 testArray = randArray(num, maxNum);
@@ -113,7 +114,7 @@ console.log('testArray: ',testArray);
 tree = createBalancedBinarySearchTree (testArray);
 tree.prettyPrint();
 */
-/*
+/******--------------------------------INSERT--------------------------------------------- 
 //testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 //testArray = [1,3,5,7,9,11];
 console.log('\n--------------------Prior to insert 4--------------------------------\n');
@@ -146,8 +147,7 @@ console.log('\n--------------------Post insert 6 -------------------------------
 tree.insert(tree.root, 6);
 //tree.root.logNode();
 tree.prettyPrint();
-
-*/
+-----------------------------------------INSERT-------------------------------------------*/
 /*
 let noRepeat = removeDuplicates(testArray);
 console.log('noDuplicates: ', noRepeat);
@@ -156,7 +156,7 @@ let sortedArray = noRepeat.sort(function(a, b){return a - b});
 console.log('sortedArray: ', sortedArray);
 */
 
-/*
+/*----------------------------------BUILDTREE------------------------------------------------------------
 console.log('\n---------------[ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]---------------------------------');
 tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);    //works ok
 tree.prettyPrint();
@@ -175,8 +175,9 @@ tree.prettyPrint();
 console.log('\n---------------------------[1]--------------------------------------------------');
 tree = new Tree([1]);           //ok
 tree.prettyPrint();
- */
-/*
+---------------------------------------------BUILDTREE------------------------------------------- */
+
+/*------------------------------------------QUEUE--------------------------------------------------
 //test queue class
 //test queue
 let q = new Queue();
@@ -195,15 +196,15 @@ while (!q.isEmpty) {
   console.log('queue value: .. ', q.dequeue());
 }
 console.log('queue empty ?',q.isEmpty);
-*/
-/*
+----------------------------------------------QUEUE----------------------------------------------*/
+
+/*---------------------------------------HEIGHT WRONG!!-------------------------------------------
 //test height(node)
 testArray = [1,3,5];
 //console.log('testArray: ',testArray);
 tree = createBalancedBinarySearchTree (testArray);
 tree.prettyPrint();
-*/
-/*
+
 //console.log('tree.root: ',tree.root);
 //tree.root.logNode();
 height = tree.height(tree.root);
@@ -214,9 +215,38 @@ tree.insert(tree.root, 6);
 tree.prettyPrint();
 height = tree.height(tree.root);
 console.log('height: ', height);
+*/
 console.log('\n-------------------------------------------------------------------------------\n');
 tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);    //works ok
 tree.prettyPrint();
+/*
+val = 67;
+console.log('depth to ',val,', ',tree.depth(tree.root, val));
+val = 324;
+console.log('depth to ',val,', ',tree.depth(tree.root, val));
+*/
+/*--------------------------------DEPTH -----------------------------------------
+console.log('\n---------------------------------------------\n');
+val = 7;
+console.log('depth to value ',val,', is: ',tree.depth(tree.root, val));
+console.log('\n---------------------------------------------\n');
+tree._q.empty();
+val = 8;
+console.log('depth to value ',val,', is: ',tree.depth(tree.root, val));
+console.log('\n---------------------------------------------\n');
+tree._q.empty();
+val = 6345;
+console.log('depth to value ',val,', is: ',tree.depth(tree.root, val));
+console.log('\n---------------------------------------------\n');
+tree._q.empty();
+console.log('\n---------------------------------------------\n');
+val =99;
+console.log('depth to ',val,', ',tree.depth(tree.root, val));
+console.log('\n---------------------------------------------\n');
+tree._q.empty();
+--------------------------------------DEPTH----------------------------------------------*/
+
+/*
 height = tree.height(tree.root);
 console.log('height: ', height);
 console.log('\n-------------------------------------------------------------------------------\n');
@@ -224,24 +254,25 @@ tree.insert(tree.root, 30);
 tree.prettyPrint();
 height = tree.height(tree.root);
 console.log('height: ', height);
-*/
-/*
+/*----------------------------------------HEIGHT-------------------------------------------------------*/
+
+/*-------------------------------------FIND---------------------------------------------------------------
 console.log('\n----------------------find 5---------------------------------------------------------\n');
 node = (tree.find(tree.root, 5))
 if(node){node.logNode();}else{console.log(null);}
 console.log('\n-----------------------find 7--------------------------------------------------------\n');
 node = tree.find(tree.root, 7);
 if(node){node.logNode();}else{console.log(null);}
-*/
-/*
+*//*
 console.log('\n-----------------------find 324--------------------------------------------------------\n');
 tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);    //works ok
 tree.prettyPrint();
 let depth = (tree.depth(324));
 console.log('depth: ', depth);
 console.log('\n-------------------------------------------------------------------------------\n');
-*/
-/*
+-----------------------------------------FIND-----------------------------------------------------------*/
+
+/*--------------------------------CURRENTLY WRONG!!------------------------------------------------
 //height of node
 console.log('\n-------------------------------------------------------------------------------\n');
 tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);    //works ok
@@ -250,8 +281,9 @@ tree.prettyPrint();
 let nodeHeight = tree.heightFN(tree.root, 324);
 console.log('node height: ', nodeHeight);
 console.log('\n-------------------------------------------------------------------------------\n');
-*/
+-----------------------------------------WRONG-----------------------------------------------------*/
 
+/*---------------------LEVELORDER----------------------------
 //tree.levelOrder();  //expect throws error
 /*
 let numbers = [1, 2, 4, 7, 3, 5, 6];
@@ -267,8 +299,9 @@ tree.prettyPrint();
 node = tree.levelOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
-*/
-/*
+---------------------------------------------------------------*/
+
+/*-------------------INORDER------------------------------
 //tree = new Tree([1,2,3,4,5,6,7,8,11,14]);
 tree = new Tree([1,2,3,4,5,7,8,11,14]);
 tree.prettyPrint();
@@ -281,14 +314,17 @@ tree.prettyPrint();
 node = tree.inOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
-*/
-/*
+----------------------------------------------------------*/
+
+/*--------------PREORDER-------------------------------
 tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,14]);
 tree.prettyPrint();
 node = tree.preOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
-*/
+-----------------------------------------------------*/
+
+/*---------------POSTORDER----------------------------
 tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
 tree.prettyPrint();
 /*prints equivalent of:
@@ -299,8 +335,9 @@ tree.prettyPrint();
 
 Expected output for post order:
     2,1,5,4,3,8,7,10,14,11,9,6
-*/
+*//*
 
 node = tree.postOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
+--------------------------------------------------------*/

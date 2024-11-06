@@ -3,7 +3,9 @@ https://en.wikipedia.org/wiki/Binary_search_tree
 
 Build a Tree class/factory which accepts an array when initialized. The Tree class should have a root attribute, which uses the return value of buildTree which you’ll write next.
 
-Write insert(value) and deleteItem(value) functions that insert/delete the given value. You’ll have to deal with several cases for delete, such as when a node has children or not
+Write insert(value) and deleteItem(value) functions that insert/delete the given value. You’ll have to deal
+                        ***************** 
+with several cases for delete, such as when a node has children or not
 
 NB IMPORTANT TO MAINTAIN EFFICIENCY 
 binary search trees can insert/delete in O(log n) time, which is a significant performance boost over arrays for the same operations so:-
@@ -16,13 +18,21 @@ Write a levelOrder(callback) function that accepts a callback function as its pa
 
 Write inOrder(callback), preOrder(callback), and postOrder(callback) functions that also accept a callback as a parameter. Each of these functions should traverse the tree in their respective depth-first order and pass each node to the provided callback. The functions should throw an Error if no callback is given as an argument, like with levelOrder.
 
-Write a height(node) function that returns the given node’s height. Height is defined as the number of edges in the longest path from a given node to a leaf node.
+Write a height(node) function that returns the given node’s height. Height is defined as the number of edges in
+        ************
+ the longest path from a given node to a leaf node.
 
-Write a depth(node) function that returns the given node’s depth. Depth is defined as the number of edges in the path from a given node to the tree’s root node.
+Write a depth(node) function that returns the given node’s depth. Depth is defined as the number of edges in 
+        **********
+the path from a given node to the tree’s root node.
 
-Write an isBalanced function that checks if the tree is balanced. A balanced tree is one where the difference between heights of the left subtree and the right subtree of every node is not more than 1.
+Write an isBalanced function that checks if the tree is balanced. A balanced tree is one where the difference 
+         **********
+between heights of the left subtree and the right subtree of every node is not more than 1.
 
-Write a rebalance function that rebalances an unbalanced tree. Tip: You’ll want to use a traversal method to provide a new array to the buildTree function.
+Write a rebalance function that rebalances an unbalanced tree. Tip: You’ll want to use a traversal method to 
+        *********
+provide a new array to the buildTree function.
 
 In-order, LNR
 
@@ -204,39 +214,64 @@ class Tree {
         return node;
     }
     
-    
-    //===find with count
-    depth ( val) {
+    //MUST ENSURE NEW OR EMPTY QUEUE BEFORE RUN
+    //depth(val)
+    depth (root, value) {
+        //console.log('at root q.len: ', this._q.length);
         let node = null; 
-        //let max =0;
-        let count =0;
-        let root = this.root;
-        node = depthToVal(root, val => {
-            let hasChild = root.hasChild();
-            //root.logNode;
-            if(root.value === val){return node = root;}
-            //console.log('hasChild: ',hasChild);
-            if (hasChild){
-                count++;
-                console.log('count: ',count);
-                //is val < or > root.value
-                if(val < root.value){
-                    //search left
-                    node =  depthToVal (root.leftSubNode, val);              
-                }else{
-                    //search right
-                    node = depthToVal (root.rightSubNode, val);
-                }   
-            }
-            return node;
-        });
-        console.log('node: ', node);
-        if(node === null ){count = 0;}
-        else{ console.log('227:depth: ',count);}
-        return count;
-    }
-   
+        let hasChild;
+        //let copyQ;
+        if(!( (root === null )|| (root === undefined) )){
+            hasChild = root.hasChild();
+        }
+        else{
+            //root is null
+            console.log('depth to value (',value,') : value not found !');
+            //console.log('ret at 230');
+            //return null;
+            process.exit(0);
+        }
+        //console.log('root ',root.value,', val ',value);
+        if(root.value === value){ 
+            //copyQ = JSON.parse(JSON.stringify(this._q));
+            //console.log('230copy: ',copyQ,', org: ', this._q);
+            //console.log('(at root === value): q.len: ', this._q.length );
+            //this._q = {};
+            //return copyQ.length;
+            //console.log('ret at 239');
+            return this._q.length;
+            
+        }
+        //console.log('hasChild: ', hasChild);
+        if (hasChild){
+            //enqueue node or node.value
+            this._q.enqueue(root.value);
+            //console.log('235 enqueing q.len: ', this._q.length);
 
+            //is val < or > root.value
+            if(value < root.value){
+                //search left
+                node =  this.depth(root.leftSubNode, value);
+               // this._q.dequeue();  
+               // console.log('242 dequeing l q.len: ', this._q.length);            
+            }else{
+                //search right
+                 node = this.depth(root.rightSubNode, value);
+                //this._q.dequeue();
+                //console.log('247 dequeing r q.len: ', this._q.length); 
+            }   
+        }
+       // console.log('250 returning');
+       // console.log('251 dequeing  q.len: ', this._q.length);
+       //copyQ = JSON.parse(JSON.stringify(this._q));
+       //console.log('256 copy: ',copyQ,', org: ', this._q);
+       //console.log('256 returning q.len: ', this._q.length );
+       //this._q = {};
+       //return copyQ.length;
+       //console.log('ret at 269');
+       return this._q.length;
+    }
+    
     /*
         Delete node
         deleteItem(value) function that deletes the given value. Deal with several cases for delete, such as when a node has children or not
@@ -647,7 +682,10 @@ class Tree {
                                     this._q.dequeue();
                                     //console.log('q.len: ',this._q.length);
                                     //process the topmost root
-                                    if(this._q.length === 1){console.log(node.value);}
+                                    if(this._q.length === 1){
+                                        this._q.dequeue();
+                                        console.log(node.value);
+                                    }                                   //05/11/24
                                     return;
                         break;
                     }
