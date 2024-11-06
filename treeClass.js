@@ -22,8 +22,7 @@ Write a height(node) function that returns the given node’s height. Height is 
         ************
  the longest path from a given node to a leaf node.
 
-Write a depth(node) function that returns the given node’s depth. Depth is defined as the number of edges in 
-        **********
+Write a depth(node) function that returns the given node’s depth. Depth is defined as the number of edges in
 the path from a given node to the tree’s root node.
 
 Write an isBalanced function that checks if the tree is balanced. A balanced tree is one where the difference 
@@ -226,7 +225,7 @@ class Tree {
         }
         else{
             //root is null
-            console.log('depth to value (',value,') : value not found !');
+            console.log('call to value (',value,') : value not found !');
             //console.log('ret at 230');
             //return null;
             process.exit(0);
@@ -291,122 +290,67 @@ class Tree {
     /*
         Write a height(node) function that returns the given node’s height. Height is defined as the number of edges in the longest path from a given node to a leaf node.  
     */
-    //NB CURRENTLY DEPTH TO NODE!!          //heightFN  heightFromNode()
-    heightFN(root, val){
-        let height = 0;
-        let l_height;
-        let r_height;
-        let max=0;
-        let hasChild = root.hasChild();
-        console.log('root.value', root.value,', val: ', val, ',max: ',max);
-        
-        //root.logNode;
-        //console.log('hasChild: ',hasChild);
-        if (hasChild){
-            height++;
-            
-            //console.log('207: height',height);
-            switch (hasChild) {
-                case 'both': {
-                        l_height = height;
-                        l_height += this.heightFN(root.leftSubNode,val);
-                        //console.log('211: l_height',l_height);
-                        max = l_height > max ? l_height : max;
-                        if(root.leftSubNode.value === val){ return max;}
-                        r_height = height;
-                        r_height += this.heightFN(root.rightSubNode,val);
-                        //console.log('214: r_height',r_height);
-                        max = r_height > max ? r_height : max
-                        if(root.rightSubNode.value === val){ return max;}
-                    break;
-                }
-                case 'left': {
-                        l_height = height;
-                        l_height += this.heightFN(root.leftSubNode,val);
-                        //console.log('225: l_height',l_height);
-                        max = l_height > max ? l_height : max;
-                        if(root.leftSubNode){
-                            if(root.leftSubNode.value === val){ return max;}
-                        }
-                    break;
-                }
-                case 'right': {
-                        r_height = height;
-                        r_height += this.heightFN(root.rightSubNode,val);
-                        //console.log('214: r_height',r_height);
-                        max = r_height > max ? r_height : max
-                        if(root.rightSubNode){
-                            if(root.rightSubNode.value === val){ return max;}
-                        }
-                    break;
-                }
-            }
-                  
-        }else{
-            max = height > max ? height : max;
-           // if(root.value === val){ return max;}
-            return max;
-        }   
+    height (root, value) {
+        let treeHeight = this.heightMax(root);
+        //console.log('heightMax: ', treeHeight);
+        this._q.empty();
+        let nodeDepth = this.depth(root, value);
+        //console.log('nodeDepth: ',nodeDepth);
+        let nodeHeight = treeHeight - nodeDepth;
+        return nodeHeight;
     }
 
     /*
-        this one is a height(root) function that returns the given tree's height. Height here is defined as the number of edges in the longest path from root to the lowest leaf node. Called with trees root.
+        this one is a heightMax(root) function that returns the given tree's height. Height here is defined as the number of edges in the longest path from root to the lowest leaf node. Called with trees root.
     */
 
-    height(root) {
+    heightMax(root) {
         let height = 0;
         let l_height;
         let r_height;
         let max = 0;
         let hasChild = root.hasChild();
-        //root.logNode;
+        root.logNode.value;
         //console.log('hasChild: ',hasChild);
         if (hasChild){
             height++;
-            //console.log('207: height',height);
+            //console.log('316: height',height);
             switch (hasChild) {
                 case 'both': {
                         l_height = height;
-                        l_height += this.height(root.leftSubNode);
-                        //console.log('211: l_height',l_height);
+                        l_height += this.heightMax(root.leftSubNode);
+                        //console.log('321: l_height',l_height);
                         max = l_height > max ? l_height : max;
                         r_height = height;
-                        r_height += this.height(root.rightSubNode);
-                        //console.log('214: r_height',r_height);
+                        r_height += this.heightMax(root.rightSubNode);
+                        //console.log('325: r_height',r_height);
                         max = r_height > max ? r_height : max
+                        //console.log('327 Max: ',max);
                     break;
                 }
                 case 'left': {
                         l_height = height;
-                        l_height += this.height(root.leftSubNode);
-                        //console.log('225: l_height',l_height);
+                        l_height += this.heightMax(root.leftSubNode);
+                        //console.log('332: l_height',l_height);
                         max = l_height > max ? l_height : max;
+                        //console.log('335 Max: ',max);
                     break;
                 }
                 case 'right': {
                         r_height = height;
-                        r_height += this.height(root.rightSubNode);
-                        //console.log('214: r_height',r_height);
+                        r_height += this.heightMax(root.rightSubNode);
+                        //console.log('339: r_height',r_height);
                         max = r_height > max ? r_height : max
+                        //console.log('343 Max: ',max);
                     break;
                 }
             }
                 
         }
-        
+        //console.log('349 returning Max: ',max);
         return max;
-        
     }
-   /*
-        Write a depth(node) function that returns the given node’s depth. Depth is defined as the number of edges in the path from a given node to the tree’s root node.
-    */
-   /*
-        depth(node) {
-            let depth = 0;
-
-            return depth;
-        }
-*/
+   
 
     /*
         isBalanced function that checks if the tree is balanced. A balanced tree is one where the difference between heights of the left subtree and the right subtree of every node is not more than 1.

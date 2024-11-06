@@ -225,36 +225,39 @@ console.log('depth to ',val,', ',tree.depth(tree.root, val));
 val = 324;
 console.log('depth to ',val,', ',tree.depth(tree.root, val));
 */
-/*--------------------------------DEPTH -----------------------------------------
+/*--------------------------------DEPTH & HEIGHT----------------------------------------*/
 console.log('\n---------------------------------------------\n');
 val = 7;
 console.log('depth to value ',val,', is: ',tree.depth(tree.root, val));
+console.log('height to value ',val,', is: ',tree.height(tree.root, val));
 console.log('\n---------------------------------------------\n');
 tree._q.empty();
+
 val = 8;
 console.log('depth to value ',val,', is: ',tree.depth(tree.root, val));
+console.log('height to value ',val,', is: ',tree.height(tree.root, val));
 console.log('\n---------------------------------------------\n');
 tree._q.empty();
+
 val = 6345;
 console.log('depth to value ',val,', is: ',tree.depth(tree.root, val));
+console.log('height to value ',val,', is: ',tree.height(tree.root, val));
 console.log('\n---------------------------------------------\n');
 tree._q.empty();
 console.log('\n---------------------------------------------\n');
+/*
 val =99;
 console.log('depth to ',val,', ',tree.depth(tree.root, val));
+console.log('height to value ',val,', is: ',tree.height(tree.root, val));
 console.log('\n---------------------------------------------\n');
 tree._q.empty();
---------------------------------------DEPTH----------------------------------------------*/
-
-/*
-height = tree.height(tree.root);
-console.log('height: ', height);
-console.log('\n-------------------------------------------------------------------------------\n');
-tree.insert(tree.root, 30);
-tree.prettyPrint();
-height = tree.height(tree.root);
-console.log('height: ', height);
-/*----------------------------------------HEIGHT-------------------------------------------------------*/
+*/
+val =67;
+console.log('depth to ',val,', ',tree.depth(tree.root, val));
+console.log('height to value ',val,', is: ',tree.height(tree.root, val));
+console.log('\n---------------------------------------------\n');
+tree._q.empty();
+/*----------------------------------DEPTH & HEIGHT-------------------------------------------*/
 
 /*-------------------------------------FIND---------------------------------------------------------------
 console.log('\n----------------------find 5---------------------------------------------------------\n');
