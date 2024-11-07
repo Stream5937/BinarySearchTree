@@ -215,17 +215,17 @@ tree.insert(tree.root, 6);
 tree.prettyPrint();
 height = tree.height(tree.root);
 console.log('height: ', height);
-*/
+*//*
 console.log('\n-------------------------------------------------------------------------------\n');
 tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);    //works ok
-tree.prettyPrint();
+tree.prettyPrint(); */
 /*
 val = 67;
 console.log('depth to ',val,', ',tree.depth(tree.root, val));
 val = 324;
 console.log('depth to ',val,', ',tree.depth(tree.root, val));
 */
-/*--------------------------------DEPTH & HEIGHT----------------------------------------*/
+/*--------------------------------DEPTH & HEIGHT----------------------------------------
 console.log('\n---------------------------------------------\n');
 val = 7;
 console.log('depth to value ',val,', is: ',tree.depth(tree.root, val));
@@ -251,13 +251,13 @@ console.log('depth to ',val,', ',tree.depth(tree.root, val));
 console.log('height to value ',val,', is: ',tree.height(tree.root, val));
 console.log('\n---------------------------------------------\n');
 tree._q.empty();
-*/
+*//*
 val =67;
 console.log('depth to ',val,', ',tree.depth(tree.root, val));
 console.log('height to value ',val,', is: ',tree.height(tree.root, val));
 console.log('\n---------------------------------------------\n');
 tree._q.empty();
-/*----------------------------------DEPTH & HEIGHT-------------------------------------------*/
+----------------------------------DEPTH & HEIGHT-------------------------------------------*/
 
 /*-------------------------------------FIND---------------------------------------------------------------
 console.log('\n----------------------find 5---------------------------------------------------------\n');
@@ -296,13 +296,14 @@ tree.prettyPrint();
 node = tree.levelOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
-
+*/
+/*
 tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345 ]);
 tree.prettyPrint();
 node = tree.levelOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
----------------------------------------------------------------*/
+/*---------------------------------------------------------------*/
 
 /*-------------------INORDER------------------------------
 //tree = new Tree([1,2,3,4,5,6,7,8,11,14]);
@@ -317,7 +318,7 @@ tree.prettyPrint();
 node = tree.inOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
-----------------------------------------------------------*/
+/*----------------------------------------------------------*/
 
 /*--------------PREORDER-------------------------------
 tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,14]);
@@ -328,7 +329,7 @@ else{console.log('complete');}
 -----------------------------------------------------*/
 
 /*---------------POSTORDER----------------------------
-tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
+tree = new Tree([1,2,3,4,5,6,7,8,9,10,11,14]);
 tree.prettyPrint();
 /*prints equivalent of:
         v-----------6-----------v
@@ -338,9 +339,38 @@ tree.prettyPrint();
 
 Expected output for post order:
     2,1,5,4,3,8,7,10,14,11,9,6
-*//*
-
+*/
+/*
 node = tree.postOrder(tree.root, (node => node.logNode() ));
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
---------------------------------------------------------*/
+/*--------------------------------------------------------*/
+
+/*-------------------------------ISBALANCED------------------------------------------------------*/
+//create an unbalanced tree
+console.log('\n-------------------------------------------------------------------------------\n');
+tree = new Tree([ 1, 3, 4, 5, 7, 8, 9, 10, 23, 67, 324, 6345 ]);    //works ok
+//tree.prettyPrint();
+tree.insert(tree.root, 63);
+tree.insert(tree.root, 60);
+tree.prettyPrint();
+console.log('isBalanced: ',tree.isBalanced(tree.root));
+/*----------------------------------ISBALANCED---------------------------------------------------*/
+
+/*---------------------------------REBALANCE-----------------------------------------------------*/
+console.log('\n-------------------------------------------------------------------------------\n');
+const rebalanced = tree.reBalance(tree.root);
+rebalanced.prettyPrint()
+console.log('\n-----------------------------------------------------------------------------------\n');
+/*---------------------------------REBALANCE-----------------------------------------------------*/
+
+/*----------------------------------DELETE------------------------------------------------------*/
+console.log('\n-------------------------------------------------------------------------------\n');
+//let someTree = rebalanced.delete(rebalanced.root, 63);
+//console.log('someTree: ',someTree);
+const amendedTree = rebalanced.delete(rebalanced.root, 63);
+//console.log('amendedTree: ',amendedTree);
+amendedTree.prettyPrint();
+console.log('\n-------------------------------------------------------------------------------\n');
+/*----------------------------------DELETE------------------------------------------------------*/
+
