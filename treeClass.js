@@ -498,7 +498,7 @@ class Tree {
             let depthRight = 0;
             let depth = 0;
 
-            console.log('root value: ',root.value,', origin: ', origin.value);
+          //  console.log('root value: ',root.value,', origin: ', origin.value);
 
             if(!(root.hasChild())){
                //balanced
@@ -560,7 +560,7 @@ class Tree {
                 
              }
             
-            console.log('maxLeft: ',maxLeft,', maxRight: ',maxRight);
+         //   console.log('maxLeft: ',maxLeft,', maxRight: ',maxRight);
             if( ((maxLeft - maxRight) > 1)  || ( (maxRight - maxLeft > 1)) ) {
                 console.log('tree unbalanced at root', root.value );
                 isBalanced = false;

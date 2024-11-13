@@ -72,13 +72,6 @@ function  createBalancedBinarySearchTree (array) {
 }
 
 
-
-
-//Print out all elements in printFormat is either level, pre, post, or in order.
-function printTree (printFormat) {
-
-}
-
 //test: Unbalance the tree by adding several numbers > 100.
 
 /*
@@ -129,36 +122,37 @@ tree.prettyPrint();
 //Confirm that the tree is balanced by calling isBalanced.
 treeIsBalanced = tree.isBalanced(tree.root);
 console.log('\nConfirm tree balanced? ',treeIsBalanced);
-/*/
-/*
+
+console.log('\n-------------------------------------------------------------------\n');
+
 //Print out all elements in level, pre, post, and in order.
 /*
 //LEVELORDER  fails  ENSURE TREE QUEUE IS EMPTY AT START
 console.log('\nThrow error for function call lacking callback function');
 tree._q.empty();
 tree.levelOrder();  //expect throws error as needs callback function
-
+*/
 //LEVELORDER  works  ENSURE TREE QUEUE IS EMPTY AT START
 console.log('\nTree values printed levelOrder:')
-tree._q.empty();    //ENSURE TREE QUEUE IS EMPTY AT START
+tree.lo_q.empty();    //ENSURE TREE QUEUE IS EMPTY AT START
 node = tree.levelOrder(tree.root, (node => {console.log(' ', node.value,' ');} ) );
 if(node){console.log('root: ', node.value ,' ');}
 else{console.log('complete');}
 
 //INORDER    ENSURE TREE QUEUE IS EMPTY AT START
 console.log('\nTree values printed inOrder:')
-tree._q.empty();
+tree.io_q.empty();
 node = tree.inOrder(tree.root, (node => {console.log(' ', node.value,' ');} ) );
 if(node){console.log('root: ', node.value ,' ');}
 else{console.log('complete');}
 
-//PREORDER    ENSURE TREE QUEUE IS EMPTY AT START
+//PREORDER    //ENSURE TREE QUEUE IS EMPTY AT START   NOT USED
 console.log('\nTree values printed preOrder:')
-tree._q.empty();
+//tree._q.empty();
 node = tree.preOrder(tree.root, (node => {console.log(' ', node.value,' ');} ) );
 if(node){console.log('root: ', node.value ,' ');}
 else{console.log('complete');}
-*//*
+
 //POSTORDER     ENSURE TREE QUEUE IS EMPTY AT START
 console.log('\nTree values printed postOrder, with depth:')
 tree.po_q.empty();
@@ -171,20 +165,23 @@ if(node){
     console.log('root: ', node.value ,' ');
 }
 else{console.log('complete');} 
-*/
 
+/*
 //UNBALANCE THE TREE by adding several numbers > 100 
 tree.insert(tree.root, 116);
 tree.insert(tree.root, 126);
 tree.insert(tree.root, 106);
+*/
+tree.insert(tree.root, 36);
+tree.insert(tree.root, 26);
 tree.prettyPrint();
 
 console.log('\n---------------a---------------------------------------------\n');
 //Confirm that the tree is unbalanced by calling isBalanced.  MUST INCLUDE ROOT
-console.log(tree.isBalanced(tree.root));     //expects false -OK
+console.log('tree is balanced?: ',tree.isBalanced(tree.root));     //expects false -OK
 console.log('\n---------------a---------------------------------------------\n');
 
-
+/*
 console.log('\n---------------b---------------------------------------------\n');
 node = tree.postOrder(tree.root, (node => {
     let balanced = true;
@@ -193,19 +190,19 @@ node = tree.postOrder(tree.root, (node => {
         balanced = tree.isBalanced(node);
         count--;
     }
-    console.log('node: ',node,', balanced: ',balanced);
+   // console.log('node: ',node,', balanced: ',balanced);
 }));
 console.log('\n---------------b---------------------------------------------\n');
 if(node){console.log('node: ',node);}
 else{console.log('complete');}
-/*/
-/*
+*/
+
 //Balance the tree by calling rebalance.    MUST ASSIGN A NEW TREE!
 reBalancedTree = tree.reBalance(tree.root);
 reBalancedTree.prettyPrint();
-*/
+
 //Confirm that the tree is now balanced by calling isBalanced.  MUST INCLUDE ROOT
-//console.log(reBalancedTree.isBalanced(reBalancedTree.root));     //expects true -FAILS
+console.log(reBalancedTree.isBalanced(reBalancedTree.root));     //expects true -FAILS
 //NB USING OUT OF BALANCE TREE
 /*
 tree._q.empty();
@@ -218,6 +215,29 @@ if(!(check === undefined)){
 console.log('depth to: ',testArray[check],',: ', tree.depth(tree.root, testArray[check]) );}
 
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //------------------------END OF TEST SCRIPT------------------------------------------*/
 //previous tests:
