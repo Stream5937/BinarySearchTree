@@ -3,8 +3,7 @@ https://en.wikipedia.org/wiki/Binary_search_tree
 
 Build a Tree class/factory which accepts an array when initialized. The Tree class should have a root attribute, which uses the return value of buildTree which you’ll write next.
 
-Write insert(value) and deleteItem(value) functions that insert/delete the given value. You’ll have to deal
-                        ***************** 
+Write insert(value) and deleteItem(value) functions that insert/delete the given value. You’ll have to deal 
 with several cases for delete, such as when a node has children or not
 
 NB IMPORTANT TO MAINTAIN EFFICIENCY 
@@ -71,7 +70,18 @@ class Tree {
     //private variables
     _array = [];
     _root = null;
-    _q = null;
+                        //some individual queues
+    dep_q = null;       //depth
+    del_q = null;       //delete
+    h_q = null;         //height
+    b_q = null;         //isBalanced
+    rb_q = null;        //rebalance
+    lo_q = null;        //levelOrder
+    io_q = null;        //inOrder
+    po_q = null;        //postOrder
+
+    _processed = [];            //08/11/24 TEMP LOGGING postOrder()
+    _enqueued = [];             //08/11/24 TEMP LOGGING postOrder()
 
     constructor (array) {
         //cater for incorrect invocation i.e not using 'new' keyword
@@ -88,7 +98,14 @@ class Tree {
          //or
          this._array = this._array.concat(array);  //a sortedNonDuplicateArray 
          this._root = this.buildTree(this._array, 0, ((this._array).length)-1); 
-         this._q = new Queue;          
+         this.dep_q = new Queue;
+         this.del_q = new Queue; 
+         this.h_q = new Queue; 
+         this.b_q = new Queue; 
+         this.rb_q = new Queue; 
+         this.lo_q = new Queue; 
+         this.io_q = new Queue;           
+         this.po_q = new Queue; 
        }
     }
 
@@ -215,59 +232,66 @@ class Tree {
     //MUST ENSURE NEW OR EMPTY QUEUE BEFORE RUN
     //depth(val)
     depth (root, value) {
-        //console.log('at root q.len: ', this._q.length);
+       // console.log('at root q.len: ', this.dep_q.length);
         let node = null; 
         let hasChild;
+       
         //let copyQ;
         if(!( (root === null )|| (root === undefined) )){
+    //        console.log('241 root: ',root);
+    //        console.log('\nroot: ',root.value ,'find depth to value: ', value);
             hasChild = root.hasChild();
         }
         else{
             //root is null
-            console.log('call to value (',value,') : value not found !');
+    //        console.log('call to value (',value,') : value not found !');
             //console.log('ret at 230');
             //return null;
             process.exit(0);
         }
-        //console.log('root ',root.value,', val ',value);
+     //  console.log('\n252 root ',root.value,', val ',value);
         if(root.value === value){ 
-            //copyQ = JSON.parse(JSON.stringify(this._q));
-            //console.log('230copy: ',copyQ,', org: ', this._q);
-            //console.log('(at root === value): q.len: ', this._q.length );
-            //this._q = {};
+            //copyQ = JSON.parse(JSON.stringify(this.dep_q));
+            //console.log('230copy: ',copyQ,', org: ', this.dep_q);
+            //console.log('(at root === value): q.len: ', this.dep_q.length );
+            //this.dep_q = {};
             //return copyQ.length;
-            //console.log('ret at 239');
-            return this._q.length;
+     //       console.log('ret at 259');
+            return this.dep_q.length;
             
         }
         //console.log('hasChild: ', hasChild);
         if (hasChild){
             //enqueue node or node.value
-            this._q.enqueue(root.value);
-            //console.log('235 enqueing q.len: ', this._q.length);
+            this.dep_q.enqueue(root.value);
+     //       console.log('267 enqueing val: ',value,', q.len: ', this.dep_q.length);
 
             //is val < or > root.value
             if(value < root.value){
                 //search left
                 node =  this.depth(root.leftSubNode, value);
-               // this._q.dequeue();  
-               // console.log('242 dequeing l q.len: ', this._q.length);            
+               // this.dep_q.dequeue();  
+               // console.log('242 dequeing l q.len: ', this.dep_q.length);            
             }else{
                 //search right
                  node = this.depth(root.rightSubNode, value);
-                //this._q.dequeue();
-                //console.log('247 dequeing r q.len: ', this._q.length); 
+                //this.dep_q.dequeue();
+                //console.log('247 dequeing r q.len: ', this.dep_q.length); 
             }   
-        }
-       // console.log('250 returning');
-       // console.log('251 dequeing  q.len: ', this._q.length);
-       //copyQ = JSON.parse(JSON.stringify(this._q));
-       //console.log('256 copy: ',copyQ,', org: ', this._q);
-       //console.log('256 returning q.len: ', this._q.length );
-       //this._q = {};
+        }else{
+      // console.log('265 returning');
+       // console.log('251 dequeing  q.len: ', this.dep_q.length);
+       //copyQ = JSON.parse(JSON.stringify(this.dep_q));
+       //console.log('256 copy: ',copyQ,', org: ', this.dep_q);
+       //console.log('256 returning q.len: ', this.dep_q.length );
+       //this.dep_q = {};
        //return copyQ.length;
-       //console.log('ret at 269');
-       return this._q.length;
+    //   console.log('ret at 289');
+       //return this.dep_q.length;
+       return;
+        }
+    //    console.log('ret at 293');
+        return this.dep_q.length;
     }
     
     /*
@@ -283,13 +307,13 @@ class Tree {
     */
     //recursive delete(root, value) with initial call to root = this._root
     delete (root, value) {
-        //this._q.empty();
+        //this.del_q.empty();
         let subArray = [];
         let callback = (root)=> {
             console.log('+++++++++++++++++++++++++++++++++++++++++++++');
-            this._q.enqueue(root);
+            this.del_q.enqueue(root);
             console.log('cb->pushing root ',root.value, ', to queue');
-            console.log('q: ',this._q);
+            console.log('q: ',this.del_q);
             console.log('+++++++++++++++++++++++++++++++++++++++++++++');
         }
         console.log('root.value: ',root.value,', value: ',value);
@@ -305,7 +329,7 @@ class Tree {
             }else{
                 //just delete it by resetting prior subNode address to null
                 console.log('------------dequeing-------------------------');
-                root = this._q.dequeue();
+                root = this.del_q.dequeue();
                 root.leftSubNode = null;
                 root.rightSubNode = null;
                 console.log('------------dequeing-------------------------');
@@ -317,8 +341,8 @@ class Tree {
                 //enque (save) this node
                 console.log('*****************************************');
                 console.log('*pushing root ',root.value, ', to queue*');
-                this._q.enqueue(root);
-                console.log('q: ',this._q);
+                this.del_q.enqueue(root);
+                console.log('q: ',this.del_q);
                 console.log('*****************************************');
                 //go left or right?
                 if(value < root.value){
@@ -338,27 +362,27 @@ class Tree {
         }
         //here if all subNodes below value to delete have been queued
         //console.log('this: ', this);
-        console.log('341: queue length: ',this._q.length);
-        console.log('head of queue: ', this._q.peek());
+        console.log('341: queue length: ',this.del_q.length);
+        console.log('head of queue: ', this.del_q.peek());
         //transfer values from queue to array
         //first remove head node which is attachment point for deleted node
-        let att_node = this._q.dequeue()
+        let att_node = this.del_q.dequeue()
         let attach = this.find(this.root, att_node.value);
         console.log('346: attach: ', attach);
         attach.rightSubNode = null;
         console.log('348: attach: ', attach);
-        const qLen = this._q.length;
+        const qLen = this.del_q.length;
         for(let i = 0; i < qLen; i++){
             console.log('i: ',i);
-            let toPush = this._q.dequeue();
+            let toPush = this.del_q.dequeue();
             if(!(toPush.value === value )){
                 console.log('toPush-value: ',toPush.value);
                 subArray.push(toPush.value);
             }
-            //console.log('349: queue length: ',this._q.length);
+            //console.log('349: queue length: ',this.del_q.length);
         }
         //then clean the queue;
-        this._q.empty();
+        this.del_q.empty();
         console.log('subArray: ',subArray);
         //===============================================================
         let newTree = createBalancedBinarySearchTree (subArray);
@@ -385,7 +409,7 @@ class Tree {
     height (root, value) {
         let treeHeight = this.heightMax(root);
         //console.log('heightMax: ', treeHeight);
-        this._q.empty();
+        this.h_q.empty();
         let nodeDepth = this.depth(root, value);
         //console.log('nodeDepth: ',nodeDepth);
         let nodeHeight = treeHeight - nodeDepth;
@@ -448,47 +472,215 @@ class Tree {
         isBalanced function that checks if the tree is balanced. A balanced tree is one where the difference between heights of the left subtree and the right subtree of every node is not more than 1.
     */
     //Confirm that the tree is balanced by calling isBalanced.
+    
     isBalanced (root) {
         //assume tree balanced then check
         let isBalanced = true;
-        //use this.levelOrder(root, callback_1) where callback_1 checks each node for depth of it's sub nodes
+        //use this.postOrder(root, callback_1) where callback_1 checks each node for depth of it's sub nodes
         //check depth of sub nodes
         //recursively check depth of each of this nodes sub-nodes by using this.preOrder(root, callback_2)
         //where callback_2 checks each subNode for hasChild and counts each yes comparing left with right
         //if > 1 then out of balance
 
         //ensure queue is empty to start
-        this._q.empty();
+       // this.b_q.empty();  dep_q covered at each call to depth
+        let maxLeft = 0;
+        let maxRight = 0;
+        let origin = root;
 
-        let callback_1 = (root) =>{
-            let leftCount = 0;
-            let rightCount = 0;
+        let callback = (root) =>{
+            if( !(isBalanced) ) {
+                //already  found to be unbalanced so return 
+                return;
+            }
 
-            let callback_2 = (root => {
+            let depthLeft  = 0;
+            let depthRight = 0;
+            let depth = 0;
+
+            console.log('root value: ',root.value,', origin: ', origin.value);
+
+            if(!(root.hasChild())){
+               //balanced
+                return;
+            }else{
+            
+                //console.log('root.leftSubNode value: ',root.leftSubNode.value);
+                //console.log('root.rightSubNode value: ',root.rightSubNode.value);
+
                 if(root.leftSubNode){
-                    leftCount++;
-                    this.preOrder(root.leftSubNode,callback_2);
-                }
-                if(root.rightSubNode){
-                    rightCount++;
-                    this.preOrder(root.rightSubNode,callback_2);
-                }
-            });
+                    this.dep_q.empty();
+                    depth = this.depth(origin,root.leftSubNode.value );
+                    this.postOrder(root.leftSubNode,callback);
 
-            this.preOrder(root,callback_2);
-            if( ((leftCount - rightCount) > 1)  || ( (rightCount - leftCount > 1)) ) {
+                    if(root.leftSubNode.value < root.value){
+                        depthLeft = depth;
+                        //retain max for left
+                         maxLeft = depthLeft > maxLeft ? depthLeft : maxLeft;
+                    }else{
+                        depthRight = depth;
+                        //retain max for right
+                        maxRight = depthRight > maxRight ? depthRight : maxRight;
+                    }
+
+                }else{
+                    this.dep_q.empty();
+                    depth = this.depth(origin,root.value );  
+                   // if(root.value < origin.value){
+                        //retain max for left
+                         maxLeft = depth;// > maxLeft ? depth : maxLeft;
+                   // }else{
+                        //retain max for right
+                   //     maxRight = depth > maxRight ? depth : maxRight;
+                   // }
+                }
+                
+
+                if(root.rightSubNode){
+                    this.dep_q.empty();
+                    depth = this.depth(origin, root.rightSubNode.value);
+                    this.postOrder(root.rightSubNode, callback);
+
+                    if(root.rightSubNode.value > root.value){
+                        depthRight = depth;
+                        //retain max for right
+                        maxRight = depthRight > maxRight ? depthRight : maxRight;
+                    }else{
+                        depthLeft  = depth;
+                        //retain max for left
+                        maxLeft = depthLeft > maxLeft ? depthLeft : maxLeft;
+                    }
+
+                }else{
+                    this.dep_q.empty();
+                    depth = this.depth(origin,root.value );
+                    maxRight = depth ;//> maxRight ? depth : maxRight;
+                }
+                
+                
+             }
+            
+            console.log('maxLeft: ',maxLeft,', maxRight: ',maxRight);
+            if( ((maxLeft - maxRight) > 1)  || ( (maxRight - maxLeft > 1)) ) {
                 console.log('tree unbalanced at root', root.value );
                 isBalanced = false;
             } 
-
+            
             return;   
         }
 
-        this.levelOrder(root, callback_1);
+        this.postOrder(root, callback);
 
         return isBalanced;
     }
+    
+    /*
+    isBalanced (root) {
 
+        console.log('root at origin: ',root);
+        //assume tree balanced then check
+        let isBalanced = true;
+        
+        //ensure queue is empty to start
+        this.b_q.empty();
+        let origin = root;
+
+        
+        let maxLeft = 0;
+        let maxRight = 0;
+        let leftDepth = 0;
+        let rightDepth = 0;
+
+        /*
+        let callback_2 = (node)=> {
+            if(node.hasChild()){
+                if(node.value < origin.value){leftDepth++;}
+                else{rightDepth++;}
+            }
+            return;
+        }
+        */
+        /*
+        let callback_1 = (root) =>{
+            leftDepth = 0;
+            rightDepth = 0;
+            origin = root;
+
+            let callback_2 = (node)=> {
+                if(node.hasChild()){
+                    if(node.value < origin.value){leftDepth++;}
+                    else{rightDepth++;}
+                }
+                return;
+            }
+            
+            let hasChild = root.hasChild(); 
+
+            if(!(hasChild)) { return; }
+            else{
+                switch (hasChild) { 
+                    case "both": {
+                        //increment both 
+                        leftDepth++;
+                        rightDepth++;
+                        //check the left leg first
+                        if(!(root.leftSubNode === null)){
+                            console.log(' ** ',root.leftSubNode );
+                            console.log('&&-callback: ', callback_2(root.leftSubNode));
+                            this.preOrder(root.leftSubNode, callback_2(root.leftSubNode));
+                            console.log('post callback');
+                        }
+                        //check the right leg second
+                        if(!(root.rightSubNode === null)){
+                            this.preOrder(root.rightSubNode, callback_2(root.rightSubNode));
+                        }
+                       // break;
+                    }
+                    case "left": {
+                        leftDepth++;
+                        if( root.leftSubNode.hasChild()){
+                            //two children to left of node none to right so imbalance
+                            isBalanced = false;
+                           // return;
+                        }else{
+                            //no so just one child to node so balanced
+                           // return;
+                        }
+                        break;
+                    }
+                    case "right": {
+                        rightDepth++;
+                        if( root.rightSubNode.hasChild()){
+                            //two children to left of node none to right so imbalance
+                            isBalanced = false;
+                            //return;
+                        }else{
+                            //no so just one child to node so balanced
+                           // return;
+                        }
+                        break;
+                    }
+                }
+                maxLeft = leftDepth > maxLeft ? leftDepth : maxLeft;
+                maxRight = rightDepth > maxRight ? rightDepth : maxRight;
+            }
+        }
+
+        
+
+        this.postOrder(root, callback_1(root));
+
+        console.log('maxLeft: ',maxLeft, ',maxRight: ',maxRight);
+
+        if( ((maxLeft - maxRight) > 1)  || ( (maxRight - maxLeft > 1)) ) {
+            console.log('tree unbalanced at root', root.value );
+            isBalanced = false;
+        } 
+              
+        return isBalanced;
+    }
+    */
+    
     /*
         Write a rebalance function that rebalances an unbalanced tree. Tip: You’ll want to use a traversal method to provide a new array to the buildTree function.
         returns a new balanced tree
@@ -497,7 +689,7 @@ class Tree {
     reBalance (root) {
         let newTree = null;
         //ensure queue is empty to start (IF USED)
-        this._q.empty();
+        this.rb_q.empty();
         //array to collect nodes
         let nodeArray = [];
 
@@ -509,18 +701,13 @@ class Tree {
         console.log(nodeArray);
        // ensure array sorted low -> high
         const sortedArray = nodeArray.sort(function(a, b){return a - b});
+        console.log(sortedArray);
 
         newTree = new Tree(sortedArray);
+        //newTree.prettyPrint();
 
-        //newTree.prettyPrint()
         return newTree;
     }
-
-
-
-
-
-
 
     /*
         levelOrder function that accepts a callback function as its parameter. levelOrder should traverse the tree in breadth-first level order and call the callback on each node as it traverses, passing the whole node as an argument, similarly to how Array.prototype.forEach might work for arrays. levelOrder may be implemented using either iteration or recursion (try implementing both!). If no callback function is provided, throw an Error reporting that a callback is required. Tip: You will want to use an array acting as a queue to keep track of all the child nodes that you have yet to traverse and to add new ones to the list
@@ -539,16 +726,16 @@ class Tree {
             //callback;
             callback(node);                             //06/11/24
             if(node.hasChild()){
-                this._q.enqueue(node.leftSubNode);
-                this._q.enqueue(node.rightSubNode);
+                this.lo_q.enqueue(node.leftSubNode);
+                this.lo_q.enqueue(node.rightSubNode);
 
-               // console.log('peek: ',this._q.peek().value);
+               // console.log('peek: ',this.lo_q.peek().value);
 
-               // console.log('q1: ',this._q.dequeue().value);
-               // console.log('q2: ',this._q.dequeue().value);
+               // console.log('q1: ',this.lo_q.dequeue().value);
+               // console.log('q2: ',this.lo_q.dequeue().value);
 
-                this.levelOrder(this._q.dequeue(), callback);   //left
-                this.levelOrder(this._q.dequeue(), callback);   //right
+                this.levelOrder(this.lo_q.dequeue(), callback);   //left
+                this.levelOrder(this.lo_q.dequeue(), callback);   //right
             }else{
                 //console.log('407: returning');
                 return;
@@ -620,8 +807,8 @@ class Tree {
                 if(!(visited.includes(left))) {
                 //so is new
                 //store self  
-                console.log('587:enqueue: ', node.value);
-                this._q.enqueue(node);
+                //console.log('587:enqueue: ', node.value);
+                this.io_q.enqueue(node);
                 //go left     
                 this.inOrder(left, callback);
                 }
@@ -637,8 +824,8 @@ class Tree {
                 }else{
                     //else
                     //pop address
-                    node = this._q.dequeue();
-                    console.log('605:dequeue: ', node.value);
+                    node = this.io_q.dequeue();
+                    //console.log('605:dequeue: ', node.value);
                     //go address 
                     this.inOrder(node, callback);
                 }
@@ -673,6 +860,7 @@ class Tree {
         Preorder (root -> right)
     */
         preOrder (node, callback ) {
+           // console.log('##-callback: ',JSON.stringify(callback));
            // let visited = []
             let left;
             let right;
@@ -689,7 +877,7 @@ class Tree {
                 //record visit to node
                // if(!(visited.includes(node.value))) {visited.push(node.value);}
                 //processing node here
-               // console.log('*processing node: ',node.value);
+               // console.log('*processing node: ',node.value);   
                 callback(node);                            //06/11/24
                 if(child = node.hasChild()){
                     /*  possible responses for child(ren):
@@ -740,30 +928,26 @@ class Tree {
         Post-order traversal can be useful to get postfix expression of a binary expression tree. 
 
         If root is NULL then return
-        Postorder (root -> left)
-        Postorder (root -> right)
+        postOrder (root -> left)
+        postOrder (root -> right)
         Process root (For example, print(root->data))
     */
     postOrder (node, callback) {
-       // let processed = [];
         let left;
         let right;
-        let child;   //to node.hasChild() ?
+        let child; 
+        
         try{
             if(callback === undefined) {throw "callback function needed";}
             
             if( (node === null )|| (node === undefined) ){
-                console.log('609: returning');
                 return;
             }
-           // let result = prompt("hit key to continue: ");
-            //if(result === 'q'){throw 99;}
-            //console.log('** ',node.value,' **');
-            this._q.enqueue(node.value);
-            //visited.push(root);
+          
+            this.po_q.enqueue(node.value);
+            
             if(child = node.hasChild()){
-                //console.log('root ',root);
-                //console.log('has child');
+                
                 /*  possible responses for child(ren):
                     case 0: { return false; }
                     case 1: { return 'left';}
@@ -775,37 +959,35 @@ class Tree {
                     case 'both': {
                                     left = node.leftSubNode;
                                     this.postOrder(left, callback);
-                                    //console.log('l ',left.value);
-                                   // console.log('l- ',left.value);
-                                   callback(left);                      //07/11/24
-                                   // processed.push(this._q.dequeue());
-                                    this._q.dequeue();
+                                   
+                                    callback(left); 
+                                   
+                                   if((this.po_q.length > 1)){  
+                                       this.po_q.dequeue();
+                                   }  
                                     right = node.rightSubNode;
                                     this.postOrder(right, callback);
-                                    //console.log('r ',right.value);
-                                    //console.log('r- ',right.value);
-                                    callback(right);                    //07/11/24
-                                   // processed.push(this._q.dequeue());
-                                    this._q.dequeue();
-                                    //console.log('q.len: ',this._q.length);
+ 
+                                    callback(right); 
+
+                                   if((this.po_q.length > 1)){ 
+                                        this.po_q.dequeue();
+                                    }
+
                                     //process the topmost root
-                                    if(this._q.length === 1){
-                                        this._q.dequeue();
-                                       // console.log('n- ',node.value);  
-                                        callback(node);                   //07/11/24
-                                    }                                   //05/11/24
+                                    if(this.po_q.length === 1){
+                                        this.po_q.dequeue(); 
+                                        callback(node);  
                                     return;
+                                    }
                         break;
                     }
                     case 'left': {
                                     left = node.leftSubNode;
                                     this.postOrder(left, callback);
                                     right = null;
-                                    //console.log('* ',left.value);
-                                   // console.log('ll- ',left.value);
-                                    callback(left);                     //07/11/24
-                                    // processed.push(this._q.dequeue());
-                                    this._q.dequeue();
+                                    callback(left);
+                                    this.po_q.dequeue(); 
                                     return;
                         break;
                     }
@@ -813,38 +995,28 @@ class Tree {
                                     left = null;
                                     right = node.rightSubNode;
                                     this.postOrder(right, callback);
-                                    //console.log('2,5,8 ',right.value);
-                                   // console.log('rr- ',right.value);
-                                    callback(right);                        //07/11/24
-                                    // processed.push(this._q.dequeue());
-                                    this._q.dequeue();
+                                    callback(right); 
+                                    this.po_q.dequeue(); 
                                     return;
                         break;
                     }
                     default: {
                         throw 'Error at switch child';
                     }
+
                 } 
-                //xx process node here
-                //console.log('processing node: ', node.value);
+                
             }else{
-                //console.log('No child');
-                //this.postOrder(node, callback);
-                //console.log('processing node: ', node.value);
-                //console.log('* ', node.value);
-                //xxconsole.log('root ',root);
+               // console.log('No child');
                 return;
             }
-            console.log('#####');
         }
         catch(error){
             console.log(error);
             process.exit(0);
-        }
-        //xxconsole.log('root ',root);
-    }
-
-}
+        } 
+    } 
+} //end of class
 
 function  createBalancedBinarySearchTree (array) {
     //sort numeric array low to high

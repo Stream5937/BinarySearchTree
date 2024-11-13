@@ -53,8 +53,8 @@ class Node {
         console.log('      | ');
         console.log('    (',this.value,') ');
         console.log('  v---^---v    ')
-        if(this.leftSubNode){left = this.leftSubNode.value;}
-        if(this.rightSubNode){right = this.rightSubNode.value;}
+        if(this.leftSubNode){left = this.leftSubNode.value;}else{left ='x';}
+        if(this.rightSubNode){right = this.rightSubNode.value;}else{right = 'x';}
         //console.log('(',this.leftSubNode.value,')',' ','(', this.rightSubNode.value, ')' ); //04/11/24
         console.log('(',left,')',' ','(',right, ')' ); //06/11/24
     }
