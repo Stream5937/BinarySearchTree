@@ -83,7 +83,7 @@ let height;
 let val;
 let treeIsBalanced;
 let reBalancedTree;
-/*
+
 console.log('\n------------------------------Create Array----------------------------------------------\n');
 console.log('Running Test Script: ');
 console.log('\nRandom test array');
@@ -154,10 +154,10 @@ console.log('\n------------------Insert values to unbalance the tree -----------
 tree.insert(tree.root, 116);
 tree.insert(tree.root, 126);
 tree.insert(tree.root, 106);
-*//*
+
 tree.insert(tree.root, 36);
 tree.insert(tree.root, 26);
-*//*
+
 tree.prettyPrint();
 
 console.log('\n---------------check with isBalanced()  ---------------------------------------------\n');
@@ -214,9 +214,9 @@ if(node){
     console.log('root: ', node.value ,' ');
 }
 else{console.log('complete');} 
-*/
 
-/*
+
+
 console.log('\n------------------test delete()---------------------------------------------\n');
 testArray = [79,85,89,81,7,29,12,9,40,51,85,66];
 console.log('testArray: ',testArray);
@@ -226,13 +226,6 @@ console.log('\nBinary Search tree:');
 tree = createBalancedBinarySearchTree (testArray);
 tree.prettyPrint();
 
-console.log('\n------------------tree.delete(79)---------------------------------------------\n');
-//test delete
-tree.del_q.empty();
-tree.delete(tree.root, 79);
-//console.log('tree post delete 79: ', tree);
-tree.prettyPrint();
-
 console.log('\n------------------tree.delete(51)no child--------------------------------------\n');
 testArray = [51];
 console.log('testArray: ',testArray);
@@ -240,10 +233,9 @@ console.log('\nBinary Search tree:');
 tree = createBalancedBinarySearchTree (testArray);
 tree.prettyPrint();
 tree.del_q.empty();
-tree = tree.delete(tree.root, 51);
-tree.prettyPrint();
+tree = tree.delete(51);
+if (tree) {tree.prettyPrint();}else{console.log('NoTree!');}
 
-*/
 console.log('\n------------------tree.delete(51) with children--------------------------------\n');
 testArray = [79,85,89,81,7,29,12,9,40,51,85,66];
 console.log('testArray: ',testArray);
@@ -251,15 +243,13 @@ console.log('\n-----------------------Create a Balanced Binary Search Tree------
 //Create a binary search tree from the array 
 console.log('\nBinary Search tree:');
 tree = createBalancedBinarySearchTree (testArray);
-tree.prettyPrint();
+//tree.prettyPrint();
 tree.del_q.empty();
-tree.remove(51);      //NEEDS MORE WORK
-//tree.remove(12);
-//tree.remove(66);        //WORKS & CLUE FOR REMOVE ROOT AT51
-//tree.remove(79);
-//console.log('tree post delete 51: ', tree);
-//console.log('tree post remove 12: ', tree);
+tree.delete(51);          // WORKs deleting root
+//tree.delete(12);          //works
+//tree.delete(66);          //WORKS & CLUE FOR REMOVE ROOT AT 51
+//tree.delete(79);          //works
 tree.prettyPrint();
-
+console.log('tree is balanced ?: ',tree.isBalanced(tree.root));
 
 //------------------------END OF TEST SCRIPT------------------------------------------*/

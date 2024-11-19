@@ -156,6 +156,7 @@ class Tree {
 
     prettyPrint = (node = this._root, prefix = "", isLeft = true) => {
         if (node === null) {
+            console.log('No tree!');
         return;
         }
         if (node.rightSubNode !== null) {
@@ -268,298 +269,109 @@ class Tree {
         if either subNodeValue === delete value then set this subNode is node to delete .
         check if this subNode has values other than null for its children if so reset root of deleted subNode to point to these children
     */
-    //recursive delete(root, value) with initial call to root = this._root
-    delete (root, value) {
-        
-        let leafNodeDeleted = false;
-        let nodeArray = [];      //a collection of all original nodes excluding deleted node
-        let rootAtDetach;       //the root to attach nodes from below deleted node
-
-        let callback = (root)=> {
-            //console.log('val to delete so not queue',value)
-            if(!(root.value === value)){
-                this.del_q.enqueue(root);
-                console.log('callback enqueued root value: ', root.value);
-            }
-        }
-
-        console.log('at root: ',root.value);
-     //   if(nodeDeleted){return;}                //NEEDED ????
-
-        //store this node
-        this._delNodeArray.push(root);          //USED TO FIND ROOT AT DETACH
-        //console.log('283 delNodeArray: ',this._delNodeArray);
-
-        //is root.value === value
-        if(value === root.value){               //FOUND THE ONE TO DELETE
-            console.log('at val ',value,' === ',root.value);
-
-            //action delete root
-            if (root.hasChild()){
-                console.log('at val to delete & has child del_q now : ', this.del_q);
-                console.log('291 hasChild',root.hasChild());
-                this.preOrder(root, callback);   //enqueue all nodes except node to delete
-
-                const qLen = this.del_q.length;
-                for(let i = 0; i < qLen; i++){
-                    nodeArray.push(this.del_q.dequeue());
-                }
-               // console.log(nodeArray);
-                // ensure array sorted low -> high
-                const sortedArray = nodeArray.sort(function(a, b){return a - b});
-                console.log('sorted array: ',sortedArray);
-
-                let newTree = new Tree(sortedArray);
-                this.root = newTree;
-                this.leftSubNode = newTree.leftSubNode;
-                this.rightSubNode= newTree.rightSubNode;
-                return;
-            }else{
-                console.log('295 no child');
-                //just delete it by resetting prior subNode address to null
-                console.log('288 delNodeArray: ',this._delNodeArray);
-                if(this._delNodeArray.length > 1){
-                    rootAtDetach = this._delNodeArray[this._delNodeArray.length-2];
-                    rootAtDetach.leftSubNode = null;
-                    rootAtDetach.rightSubNode = null;
-                    console.log('303 rootAtDetach: ', rootAtDetach);
-                }else{
-                    //must be deleting tree root
-                    console.log('this._delNodeArray.length: ',this._delNodeArray.length);
-                    console.log('deleting tree root: ', this._delNodeArray[0]);
-                    this._delNodeArray[0].value = null;
-                    this._delNodeArray[0].leftSunNode = null;
-                    this._delNodeArray[0].rightSubNode = null;
-                }
-                
-                leafNodeDeleted = true;
-                console.log('returning this tree');
-                return this;
-            }
-        }else{
-            //not the one to delete yet
-            //does root have children
-            if (root.hasChild){
-                //enqueue (save) this node
-                this.del_q.enqueue(root);
-                //go left or right?
-                if(value < root.value){
-                    //go left
-                    root = root.leftSubNode;
-                    this.delete(root, value);
-                }else{
-                    //go right
-                    root = root.rightSubNode;
-                    this.delete(root, value);
-                }
-            }else{
-                //no children
-                console.log('returning');
-                return;
-            }
-        }
-
-      //  console.log('328 del queue: ', this.del_q);
-      //  console.log('329 delNodeArray: ',this._delNodeArray);
-      //  here if all subNodes other than deleted node have been queued
-
-        /**************************************************************************
-
-        //here if all subNodes below value to delete have been queued
-        //transfer values from queue to array
-        //first remove head node which is attachment point for deleted node
-        let att_node = this.del_q.dequeue();
-        console.log('att_node: ',att_node);
-        let attach = this.find(this.root, att_node.value);
-        attach.rightSubNode = null;
-
-        const qLen = this.del_q.length;
-        for(let i = 0; i < qLen; i++){
-            let toPush = this.del_q.dequeue();
-            if(!(toPush.value === value )){
-                subArray.push(toPush.value);
-            }
-        }
-          */
-/*
-
-        if(!leafNodeDeleted){
-            //transfer queue to subArray
-            const qLen = this.del_q.length;
-            for(let i = 0; i < qLen; i++){
-                subArray.push(this.del_q.dequeue());
-                /*
-                let toPush = this.del_q.dequeue();
-                if(!(toPush.value === value )){
-                    subArray.push(toPush.value);
-                }
-                    */ /*
-            }
-
-            //then clean the queue;
-            this.del_q.empty();
+    //recursive delete(value) with initial call to root = this._root
     
-            let newTree = createBalancedBinarySearchTree (subArray);
-            // newTree.prettyPrint();
-            console.log('returning new tree');
-            return newTree;
-        }else{
-            console.log('returning this via leafNodeDeleted');
-            return this;
+    delete(value) {
+        let savedLeftNode = null;
+        let savedRightNode = null;
+        let deletingRoot = false;
+       
+        const removeNode = (node, value) => {
+       
+        //return if not a node
+        if (!node) {
+            console.log('Not a node!');
+            return null;
         }
- /*
-        //which subNode of attachment node to attach to
-        if(attach.value < newTree.root.value){
-            //attach at rightSubNode of attach
-            attach.rightSubNode = newTree.root;
-        }else{
-            //attach at leftSubNode of attach
-            attach.leftSubNode = newTree.root;
-        }
-        return this;
-        */
-    }
-
- //#####################################################################################################
-remove(value) {
-    let savedLeftNode = null;
-    let savedRightNode = null;
-    let deletingRoot = false;
-    let count = 0;      //TEMP
-
-    const removeNode = (node, value) => {
-        //if(count++ > 2 ){console.log('429:',count);process.exit(0);}
-      //return if not a node
-      if (!node) {
-        console.log('429 not a node');
-        return null;
-      }
-      
-      //found the value to delete
-      if(value == node.value) { 
-        console.log('435 found value = node value: ',node.value);
-        //flag if node to delete === root
-        if(this.root.value === value ){
-            deletingRoot = true; 
-            savedRightNode= this.root.rightSubNode;
-            console.log('deleting root!', deletingRoot, ', savedRightNode: ', savedRightNode);
-        }
-        //but it has no children
-        if (!node.leftSubNode && !node.rightSubNode) {
-            console.log('439 has no child');
-          return null;
-        }
-  
-      //only one child node to the right
-        if (!node.leftSubNode) {
-          console.log('445 has no left child returns right subNode');
-          //no left subNode to reinstate
-          savedLeftNode = null;
-          return node.rightSubNode;
-        }
-      //only one child node to the left
-        if (!node.rightSubNode) {
-            console.log('452 has no right child returns left subNode');
+        
+        //found the value to delete
+        if(value == node.value) {  
+            //flag if node to delete === root
+            if(this.root.value === value ){
+                deletingRoot = true; 
+                savedRightNode= this.root.rightSubNode;   
+            }
+            //but it has no children
+            if (!node.leftSubNode && !node.rightSubNode) {   
+                return null;
+            }
+    
+        //only one child node to the right
+            if (!node.leftSubNode) {
+                //no left subNode to reinstate
+                savedLeftNode = null;
+                return node.rightSubNode;
+            }
+        //only one child node to the left
+            if (!node.rightSubNode) {
+                //save the leftSubNode for future reinstatement
+                savedLeftNode = node.leftSubNode;
+                return node.leftSubNode;
+            }
+    
             //save the leftSubNode for future reinstatement
             savedLeftNode = node.leftSubNode;
-            return node.leftSubNode;
-        }
-  
-        //save the leftSubNode for future reinstatement
-        savedLeftNode = node.leftSubNode;
-        console.log('savedLeftNode: ', savedLeftNode);
-       //move down the right subNode
-        let temp = node.rightSubNode;
-        console.log('\n462 both children temp is node right: ',temp.value,'hasChild: ', temp.hasChild());
-        //now only interested in smallest node smaller than temp
-        let cont = true;
-        while(cont){
-            //temp.hasChild()
-            switch (temp.hasChild()) {
-                case 'both' :
-                case 'left' :
-                    if(temp.leftSubNode === null){
-                        //do nothing
-                        console.log(' 471 do nothing left');
-                        cont = false;
-                    } else{
-                        temp = temp.leftSubNode;
-                        console.log('474 in while ! temp.left loop temp now : ',temp);
-                        cont = true;
+           
+            //move down the right subNode
+            let temp = node.rightSubNode;
+           
+            //now only interested in smallest node smaller than temp
+            let cont = true;
+            while(cont){
+                switch (temp.hasChild()) {
+                    case 'both' :
+                    case 'left' :
+                        if(temp.leftSubNode === null){
+                            //do nothing
+                            cont = false;
+                        } else{
+                            temp = temp.leftSubNode;
+                            cont = true;
+                        }
+                        break;
+
+                    case 'false':
+                    case 'right': {
+                            //do nothing
+                            cont = false;
                     }
                     break;
-
-                case 'false':
-                case 'right': {
-                        //do nothing
-                        console.log(' 481 do nothing right');
-                        cont = false;
                 }
-                break;
             }
-            if(count++ > 2 ){console.log('492');process.exit(0);}
-            console.log('486 in while');
-        }
-        
-        console.log('\n489 exit while loop with temp: ',temp);
-        console.log('\n490 node: ',node);
-        //reset the node prior to deleted node to point to replacement
-        console.log('node: ',node,', point to ', temp);
-        if(deletingRoot){
-            //remove the temp node
-            console.log('removing this.root: ',this.root,'temp.value: ',temp.value);
-         node =  removeNode(this.root, temp.value);
-         console.log('512 node after remove 66: ',node);
-         //swap root to new root being node just deleted
-         //temp.leftSubNode = savedLeftNode;
-         //temp.rightSubNode= savedRightNode;
-         temp.leftSubNode = node.leftSubNode;
-         temp.rightSubNode= node.rightSubNode;
-         node = temp;
-         console.log('513 temp: ',temp);
-         console.log('513 node: ',node);
-        }else{
-            node = temp;
-            console.log('node: ',node);
-            node.leftSubNode = savedLeftNode;
-        }
-        return node;
-        //node.rightSubNode = removeNode(node.rightSubNode, temp.value);  
-  
-      } else {
-            if (value < node.value) {
-                console.log('495 goes left');
-                if(count++ > 6 ){console.log('508');process.exit(0);}
-                console.log('496 node.leftSubNode ',node.leftSubNode);
-                node.leftSubNode = removeNode(node.leftSubNode, value);         //OK
-                console.log('498 node.leftSubNode ',node.leftSubNode);
-                return node;
-            } else {
-                console.log('474 goes right');
-                if(count++ > 6){console.log('515');process.exit(0);}
-                node.rightSubNode = removeNode(node.rightSubNode, value);       //OK
-                return node;
+            //reset the node prior to deleted node to point to replacement
+            if(deletingRoot){
+                //remove the temp node
+                node =  removeNode(this.root, temp.value);
+                //swap root to new root being node just deleted
+                temp.leftSubNode = node.leftSubNode;
+                temp.rightSubNode= node.rightSubNode;
+                node = temp;
+            }else{
+                node = temp;
+                node.leftSubNode = savedLeftNode;
+            }
+            return node;
+        } else {
+                if (value < node.value) {
+                    node.leftSubNode = removeNode(node.leftSubNode, value); 
+                    return node;
+                } else {
+                    node.rightSubNode = removeNode(node.rightSubNode, value);
+                    return node;
+                }
             }
         }
+        this.root = removeNode(this.root, value);
     }
-
-    if(count++ > 2 ){console.log('520');process.exit(0);}
-
-    console.log('479 this.root: ',this.root);
-    this.root = removeNode(this.root, value);
-    console.log('481 this.root: ',this.root);
-}
- //#####################################################################################################
+ 
 
     /*
         Write a height(node) function that returns the given node’s height. Height is defined as the number of edges in the longest path from a given node to a leaf node.  
     */
     height (root, value) {
         let treeHeight = this.heightMax(root);
-        //console.log('heightMax: ', treeHeight);
         this.h_q.empty();
         let nodeDepth = this.depth(root, value);
-        //console.log('nodeDepth: ',nodeDepth);
         let nodeHeight = treeHeight - nodeDepth;
         return nodeHeight;
     }
@@ -575,43 +387,34 @@ remove(value) {
         let max = 0;
         let hasChild = root.hasChild();
         root.logNode.value;
-        //console.log('hasChild: ',hasChild);
+        
         if (hasChild){
             height++;
-            //console.log('316: height',height);
             switch (hasChild) {
                 case 'both': {
                         l_height = height;
                         l_height += this.heightMax(root.leftSubNode);
-                        //console.log('321: l_height',l_height);
                         max = l_height > max ? l_height : max;
                         r_height = height;
                         r_height += this.heightMax(root.rightSubNode);
-                        //console.log('325: r_height',r_height);
                         max = r_height > max ? r_height : max
-                        //console.log('327 Max: ',max);
                     break;
                 }
                 case 'left': {
                         l_height = height;
                         l_height += this.heightMax(root.leftSubNode);
-                        //console.log('332: l_height',l_height);
                         max = l_height > max ? l_height : max;
-                        //console.log('335 Max: ',max);
                     break;
                 }
                 case 'right': {
                         r_height = height;
                         r_height += this.heightMax(root.rightSubNode);
-                        //console.log('339: r_height',r_height);
-                        max = r_height > max ? r_height : max
-                        //console.log('343 Max: ',max);
+                        max = r_height > max ? r_height : max;
                     break;
                 }
             }
                 
         }
-        //console.log('349 returning Max: ',max);
         return max;
     }
    
@@ -646,15 +449,10 @@ remove(value) {
             let depthRight = 0;
             let depth = 0;
 
-          //  console.log('root value: ',root.value,', origin: ', origin.value);
-
             if(!(root.hasChild())){
                //balanced
                 return;
             }else{
-            
-                //console.log('root.leftSubNode value: ',root.leftSubNode.value);
-                //console.log('root.rightSubNode value: ',root.rightSubNode.value);
 
                 if(root.leftSubNode){
                     this.dep_q.empty();
@@ -674,16 +472,10 @@ remove(value) {
                 }else{
                     this.dep_q.empty();
                     depth = this.depth(origin,root.value );  
-                   // if(root.value < origin.value){
                         //retain max for left
-                         maxLeft = depth;// > maxLeft ? depth : maxLeft;
-                   // }else{
-                        //retain max for right
-                   //     maxRight = depth > maxRight ? depth : maxRight;
-                   // }
+                         maxLeft = depth;
                 }
                 
-
                 if(root.rightSubNode){
                     this.dep_q.empty();
                     depth = this.depth(origin, root.rightSubNode.value);
@@ -702,132 +494,20 @@ remove(value) {
                 }else{
                     this.dep_q.empty();
                     depth = this.depth(origin,root.value );
-                    maxRight = depth ;//> maxRight ? depth : maxRight;
-                }
-                
-                
+                    maxRight = depth ;
+                } 
              }
-            
-         //   console.log('maxLeft: ',maxLeft,', maxRight: ',maxRight);
+
             if( ((maxLeft - maxRight) > 1)  || ( (maxRight - maxLeft > 1)) ) {
                 console.log('tree unbalanced at root', root.value );
                 isBalanced = false;
             } 
-            
             return;   
         }
-
         this.postOrder(root, callback);
-
         return isBalanced;
     }
     
-    /*
-    isBalanced (root) {
-
-        console.log('root at origin: ',root);
-        //assume tree balanced then check
-        let isBalanced = true;
-        
-        //ensure queue is empty to start
-        this.b_q.empty();
-        let origin = root;
-
-        
-        let maxLeft = 0;
-        let maxRight = 0;
-        let leftDepth = 0;
-        let rightDepth = 0;
-
-        /*
-        let callback_2 = (node)=> {
-            if(node.hasChild()){
-                if(node.value < origin.value){leftDepth++;}
-                else{rightDepth++;}
-            }
-            return;
-        }
-        */
-        /*
-        let callback_1 = (root) =>{
-            leftDepth = 0;
-            rightDepth = 0;
-            origin = root;
-
-            let callback_2 = (node)=> {
-                if(node.hasChild()){
-                    if(node.value < origin.value){leftDepth++;}
-                    else{rightDepth++;}
-                }
-                return;
-            }
-            
-            let hasChild = root.hasChild(); 
-
-            if(!(hasChild)) { return; }
-            else{
-                switch (hasChild) { 
-                    case "both": {
-                        //increment both 
-                        leftDepth++;
-                        rightDepth++;
-                        //check the left leg first
-                        if(!(root.leftSubNode === null)){
-                            console.log(' ** ',root.leftSubNode );
-                            console.log('&&-callback: ', callback_2(root.leftSubNode));
-                            this.preOrder(root.leftSubNode, callback_2(root.leftSubNode));
-                            console.log('post callback');
-                        }
-                        //check the right leg second
-                        if(!(root.rightSubNode === null)){
-                            this.preOrder(root.rightSubNode, callback_2(root.rightSubNode));
-                        }
-                       // break;
-                    }
-                    case "left": {
-                        leftDepth++;
-                        if( root.leftSubNode.hasChild()){
-                            //two children to left of node none to right so imbalance
-                            isBalanced = false;
-                           // return;
-                        }else{
-                            //no so just one child to node so balanced
-                           // return;
-                        }
-                        break;
-                    }
-                    case "right": {
-                        rightDepth++;
-                        if( root.rightSubNode.hasChild()){
-                            //two children to left of node none to right so imbalance
-                            isBalanced = false;
-                            //return;
-                        }else{
-                            //no so just one child to node so balanced
-                           // return;
-                        }
-                        break;
-                    }
-                }
-                maxLeft = leftDepth > maxLeft ? leftDepth : maxLeft;
-                maxRight = rightDepth > maxRight ? rightDepth : maxRight;
-            }
-        }
-
-        
-
-        this.postOrder(root, callback_1(root));
-
-        console.log('maxLeft: ',maxLeft, ',maxRight: ',maxRight);
-
-        if( ((maxLeft - maxRight) > 1)  || ( (maxRight - maxLeft > 1)) ) {
-            console.log('tree unbalanced at root', root.value );
-            isBalanced = false;
-        } 
-              
-        return isBalanced;
-    }
-    */
     
     /*
         Write a rebalance function that rebalances an unbalanced tree. Tip: You’ll want to use a traversal method to provide a new array to the buildTree function.
@@ -863,32 +543,22 @@ remove(value) {
    levelOrder (node, callback ) {
         try{
             if(callback === undefined) {throw "callback function needed";}
-            //let node = this.root;
+            
             if( (node === null )|| (node === undefined) ){
                 //used at only one subNode
-                //console.log('390: returning');
                 return;
             }
-           // console.log('391: node',node);
-           // console.log('node val: ',node.value);     //06/11/24
+           
             //callback;
-            callback(node);                             //06/11/24
+            callback(node);
             if(node.hasChild()){
                 this.lo_q.enqueue(node.leftSubNode);
                 this.lo_q.enqueue(node.rightSubNode);
-
-               // console.log('peek: ',this.lo_q.peek().value);
-
-               // console.log('q1: ',this.lo_q.dequeue().value);
-               // console.log('q2: ',this.lo_q.dequeue().value);
-
                 this.levelOrder(this.lo_q.dequeue(), callback);   //left
                 this.levelOrder(this.lo_q.dequeue(), callback);   //right
             }else{
-                //console.log('407: returning');
                 return;
             }
-            //return;
         }
         catch(error){
             console.log(error);
@@ -913,12 +583,11 @@ remove(value) {
             
             if( (node === null )|| (node === undefined) ){
                 //used at only one subNode ?
-                //console.log('439: returning');
                 return;
             }
             //record visit to node
             if(!(visited.includes(node.value))) {visited.push(node.value);}
-            //console.log('At node val: ',node.value);
+
             if(child = node.hasChild()){
                 /*  possible responses for child(ren):
                     case 0: { return false; }
@@ -955,7 +624,6 @@ remove(value) {
                 if(!(visited.includes(left))) {
                 //so is new
                 //store self  
-                //console.log('587:enqueue: ', node.value);
                 this.io_q.enqueue(node);
                 //go left     
                 this.inOrder(left, callback);
@@ -963,7 +631,6 @@ remove(value) {
                 else{
                     //else ??
                 }
-                //console.log('*node value: ', node.value);
                 callback(node);
                 //if new right      
                 if(!(visited.includes(right))) {
@@ -973,16 +640,13 @@ remove(value) {
                     //else
                     //pop address
                     node = this.io_q.dequeue();
-                    //console.log('605:dequeue: ', node.value);
                     //go address 
                     this.inOrder(node, callback);
                 }
 
             }else{
                 //has child response 0;
-                //console.log('node value*: ', node.value);
                 callback(node);
-                //console.log('407: returning');
                 return;
             }
             //return;
@@ -1008,8 +672,6 @@ remove(value) {
         Preorder (root -> right)
     */
         preOrder (node, callback ) {
-           // console.log('##-callback: ',JSON.stringify(callback));
-           // let visited = []
             let left;
             let right;
             let child;   //to node.hasChild() ?
@@ -1018,15 +680,11 @@ remove(value) {
                 
                 if( (node === null )|| (node === undefined) ){
                     //used at only one subNode ?
-                    //console.log('533: returning');
                     return;
                 }
                 
-                //record visit to node
-               // if(!(visited.includes(node.value))) {visited.push(node.value);}
-                //processing node here
-               // console.log('*processing node: ',node.value);   
-                callback(node);                            //06/11/24
+                //record visit to node  
+                callback(node); 
                 if(child = node.hasChild()){
                     /*  possible responses for child(ren):
                         case 0: { return false; }
@@ -1151,11 +809,9 @@ remove(value) {
                     default: {
                         throw 'Error at switch child';
                     }
-
-                } 
-                
+                }    
             }else{
-               // console.log('No child');
+            
                 return;
             }
         }
@@ -1177,24 +833,20 @@ function  createBalancedBinarySearchTree (array) {
 
 //remove duplicates from array
 function removeDuplicates(array) {
-    // console.log('array:.. ', array, ' ..');
      let len = array.length;
      let val;
      for (let i =0; i < len; i++){
-         //console.log('i: ',i);
          val = array[i]
          for(let j =0; j< len; j++){
              if(j === i){
                  //skip
              }else{
                  if(array[j] === val){
-                     //console.log('array[j]: ', array[j]);
                     array.splice(j,1) ;
                  }
              }
          } 
      }
-    // console.log('array:** ', array, ' **');
     return array;
  }
 
